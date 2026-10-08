@@ -16,7 +16,7 @@ Product backlog on google sheet: https://docs.google.com/spreadsheets/d/11GsaviM
 
 
 
-###### **Overview**
+# **Overview**
 
 
 
@@ -24,11 +24,11 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-##### **1. High-Priority Items (Core Functionality)**
+# **1. High-Priority Items (Core Functionality)**
 
 
 
-###### **PBI-01: Book Registration**
+## **PBI-01: Book Registration**
 
 
 
@@ -44,7 +44,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-02: Book Information Management**
+## **PBI-02: Book Information Management**
 
 
 
@@ -60,7 +60,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-03: Inventory Management**
+## **PBI-03: Inventory Management**
 
 
 
@@ -76,7 +76,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-04: Sales Registration**
+## **PBI-04: Sales Registration**
 
 
 
@@ -92,11 +92,11 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-##### **2. Medium-Priority Items (Transaction Processing \& Search)**
+# **2. Medium-Priority Items (Transaction Processing \& Search)**
 
 
 
-###### **PBI-05: Calculate Sale Total**
+## **PBI-05: Calculate Sale Total**
 
 
 
@@ -112,7 +112,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-06: Generate Invoice**
+## **PBI-06: Generate Invoice**
 
 
 
@@ -128,7 +128,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-08: Book Search and Consultation**
+## **PBI-08: Book Search and Consultation**
 
 
 
@@ -144,11 +144,11 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-##### **3. Low-Priority Items (Reporting \& Customer Tracking)**
+# **3. Low-Priority Items (Reporting \& Customer Tracking)**
 
 
 
-###### **PBI-07: Sales Reports**
+## **PBI-07: Sales Reports**
 
 
 
@@ -164,7 +164,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-09: Report of Sold Books**
+## **PBI-09: Report of Sold Books**
 
 
 
@@ -180,7 +180,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-10: Customer Registration**
+## **PBI-10: Customer Registration**
 
 
 
@@ -196,7 +196,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-11: Personalized recommendations**
+## **PBI-11: Personalized recommendations**
 
 
 
@@ -212,7 +212,7 @@ This document outlines the Product Backlog for the Bookly desktop application de
 
 
 
-###### **PBI-12: Recommendation email**
+## **PBI-12: Recommendation email**
 
 
 
