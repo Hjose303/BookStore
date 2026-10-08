@@ -16,3 +16,5 @@ Main features
 In general terms
 The operation of the system can be summed up as follows:
 Register books → Check stock → Register sale → Update stock → Generate invoice → Generate reports
+
+Link of Document: https://docs.google.com/document/d/1p29hUNTpuUd7aUDWdATBZTkoZmlgE62lhyKTo7Oj68M/edit?usp=sharing
