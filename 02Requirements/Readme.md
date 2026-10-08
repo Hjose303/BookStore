@@ -3,6 +3,7 @@ When a customer buys one or more books, the sale must be recorded in the system.
 The system will also allow you analyze sales through reports by time periods and check the income earned over a specific period.
 
 Main features
+
 1. CRUD BOOK ------> Create, Read, Update, Delete BOOKS
 2. searchBook ------> Search for books by author, title, price, or category.
 3. recordSales ------> Record the books sold, the quantity, and automatically calculate the total.
@@ -17,4 +18,5 @@ In general terms
 The operation of the system can be summed up as follows:
 Register books → Check stock → Register sale → Update stock → Generate invoice → Generate reports
 
-Link of Document: https://docs.google.com/document/d/1p29hUNTpuUd7aUDWdATBZTkoZmlgE62lhyKTo7Oj68M/edit?usp=sharing
+Link of Document: 
+
