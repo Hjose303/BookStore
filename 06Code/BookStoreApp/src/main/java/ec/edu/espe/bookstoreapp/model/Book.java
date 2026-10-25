@@ -2,6 +2,7 @@
 package ec.edu.espe.bookstoreapp.model;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -19,22 +20,26 @@ public class Book {
     private LiteraryGenre literaryGenre;
     private EducationalLevel educationalLevel;
     
-    public ArrayList<Book> searchBookByAuthor(String authorName){
-        ArrayList<Book> booksSearch = new ArrayList<>();
-        boolean matches = this.authors.stream().anyMatch(a ->a.getName().contains(authorName));
-        if(matches){
-            booksSearch.add(this);
+    public ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
+        ArrayList<Book> results = new ArrayList<>();
+        if (allBooks != null) {
+            results = allBooks.stream()
+                    .filter(b -> b.getAuthors() != null
+                    && b.getAuthors().stream().anyMatch(a -> a.getName().equalsIgnoreCase(authorName)))
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
-        return booksSearch;
+        return results;
     }
     
-    public ArrayList<Book> searchBookByTitle(String title){
-        ArrayList<Book> books = new ArrayList<>();
-        boolean matches = this.title != null && this.title.toLowerCase().contains(title.toLowerCase());
-        if (matches) {
-            books.add(this);
+    public ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
+        ArrayList<Book> results = new ArrayList<>();
+        if (allBooks != null) {
+            results = allBooks.stream()
+                    .filter(b -> b.getTitle() != null
+                    && b.getTitle().toLowerCase().contains(titleQuery.toLowerCase()))
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
-        return books;
+        return results;
     }
     
     
