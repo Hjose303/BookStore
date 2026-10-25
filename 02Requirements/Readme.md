@@ -18,5 +18,5 @@ In general terms
 The operation of the system can be summed up as follows:
 Register books → Check stock → Register sale → Update stock → Generate invoice → Generate reports
 
-
+link of the document: https://docs.google.com/spreadsheets/d/11GsaviMb6XHt1VdH-Xew6XaLYlimXgqcGDW\_NS6YBOU/edit?usp=sharing
 
