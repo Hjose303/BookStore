@@ -42,6 +42,9 @@ public class Book {
         return results;
     }
     
+    public boolean validateStock() {
+    return stock > 0;
+    }
     
     public Book(String title, ArrayList<Author> authors, Editorial editorial, 
             float price, int stock, String state, LiteraryGenre literaryGenre, 

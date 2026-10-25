@@ -8,9 +8,9 @@ package ec.edu.espe.bookstoreapp.model;
 public class Editorial {
     private static int idCurrent;
     private int idEditorial;
-    private int nameEditorial;
+    private String nameEditorial;
 
-    public Editorial(int nameEditorial) {
+    public Editorial(String nameEditorial) {
         this.nameEditorial = nameEditorial;
         this.idEditorial = idCurrent++;
     }
@@ -31,11 +31,11 @@ public class Editorial {
         this.idEditorial = idEditorial;
     }
 
-    public int getNameEditorial() {
+    public String getNameEditorial() {
         return nameEditorial;
     }
 
-    public void setNameEditorial(int nameEditorial) {
+    public void setNameEditorial(String nameEditorial) {
         this.nameEditorial = nameEditorial;
     }
     
