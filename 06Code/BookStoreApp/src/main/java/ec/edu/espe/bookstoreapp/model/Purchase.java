@@ -25,7 +25,7 @@ public class Purchase {
         return "Purchase{" + "idPurchase=" + getIdPurchase() + ", date=" + getDate() + ", totalPurchase=" + getTotalPurchase() + ", supplier=" + getSupplier() + '}';
     }
     
-    public PurchaseDetail addDetailPurchase(detail : PurchaseDetail){
+    public PurchaseDetail addDetailPurchase(PurchaseDetail detail){
         
     }
 
