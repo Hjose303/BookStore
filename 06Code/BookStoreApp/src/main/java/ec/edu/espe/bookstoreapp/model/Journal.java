@@ -18,16 +18,7 @@ public class Journal {
     private int stock;
     private String state;
     
-    public ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
-        ArrayList<Journal> results = new ArrayList<>();
-        if (allJournal != null) {
-            results = allJournal.stream()
-                    .filter(j -> j.getNameJournal()!= null
-                    && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
+    
     
     public Journal(String nameJournal, Editorial editorial, LocalDate yearOfPublication, float price, int stock, String state) {
         this.nameJournal = nameJournal;

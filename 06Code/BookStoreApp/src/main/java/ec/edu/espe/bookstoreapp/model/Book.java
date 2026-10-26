@@ -20,27 +20,8 @@ public class Book {
     private LiteraryGenre literaryGenre;
     private EducationalLevel educationalLevel;
     
-    public ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getAuthors() != null
-                    && b.getAuthors().stream().anyMatch(a -> a.getName().equalsIgnoreCase(authorName)))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
     
-    public ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getTitle() != null
-                    && b.getTitle().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
+    
     
     public boolean validateStock() {
     return stock > 0;

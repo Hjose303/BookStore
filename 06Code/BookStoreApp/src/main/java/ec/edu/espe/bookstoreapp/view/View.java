@@ -51,7 +51,7 @@ public class View {
             case 5 ->
                 searchBooks(books);
             case 6 ->
-                searchJournals();
+                searchJournals(journals);
             case 7 ->
                 checkEconomicStatus();
             case 8 ->
@@ -170,21 +170,62 @@ public class View {
             case 1 -> {
                 System.out.print("Ingrese el Titulo del Libro");
                 String title = input.nextLine();
-           
-                
+                ArrayList<Book> results =searchBookByTitle(title, inventory);
+                System.out.println("======================================");
+                System.out.println("Libros Encontrados: ");
+                results.toString();
             }
             case 2 -> {
+                System.out.print("Ingrese El Nombre del Autor: ");
+                String nameAuthor = input.nextLine();
+                ArrayList<Book> results =searchBookByAuthor(nameAuthor, inventory);
+                System.out.println("======================================");
+                System.out.println("Libros Encontrados: ");
+                results.toString();
             }
             default -> throw new AssertionError();
         }
     }
-    
-    public static void searchJournals() {
+    public static ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
+        ArrayList<Book> results = new ArrayList<>();
+        if (allBooks != null) {
+            results = allBooks.stream()
+                    .filter(b -> b.getTitle() != null
+                    && b.getTitle().toLowerCase().contains(titleQuery.toLowerCase()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        return results;
+    }
+    public static ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
+        ArrayList<Book> results = new ArrayList<>();
+        if (allBooks != null) {
+            results = allBooks.stream()
+                    .filter(b -> b.getAuthors() != null
+                    && b.getAuthors().stream().anyMatch(a -> a.getName().equalsIgnoreCase(authorName)))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        return results;
+    }
+    public static void searchJournals(ArrayList<Journal> inventory) {
         System.out.flush();
+        System.out.println("===========================================");
         System.out.println("Buscar Revistas: ");
         System.out.print("Ingrese el Nombre de la Revista: ");
+        String nameJournal = input.nextLine();
+        ArrayList<Journal> results = searchJournalByTitle(nameJournal, inventory);
+        results.toString();
+        
     }
-
+    public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
+        ArrayList<Journal> results = new ArrayList<>();
+        if (allJournal != null) {
+            results = allJournal.stream()
+                    .filter(j -> j.getNameJournal()!= null
+                    && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        return results;
+    }
     public static void checkEconomicStatus() {
         System.out.flush();
         System.out.println("Estado Economico");
