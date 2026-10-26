@@ -18,10 +18,10 @@ public class Journal {
     private int stock;
     private String state;
     
-    public ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
+    public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournals) {
         ArrayList<Journal> results = new ArrayList<>();
-        if (allJournal != null) {
-            results = allJournal.stream()
+        if (allJournals != null) {
+            results = allJournals.stream()
                     .filter(j -> j.getNameJournal()!= null
                     && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
                     .collect(Collectors.toCollection(ArrayList::new));
@@ -38,7 +38,11 @@ public class Journal {
         this.state = state;
         this.idJournal = id++;
     }
-
+    
+    public boolean validateStock() {
+        return stock > 0;
+    }
+        
     public static int getId() {
         return id;
     }
@@ -101,19 +105,17 @@ public class Journal {
 
     public void setState(String state) {
         this.state = state;
-    }
-
+    }   
+    
     @Override
     public String toString() {
-        return "Journal{" 
-                + "idJournal=" + idJournal 
-                + ", nameJournal=" + nameJournal 
-                + ", editorial=" + editorial 
-                + ", yearOfPublication=" + yearOfPublication 
-                + ", price=" + price 
-                + ", stock=" + stock 
-                + ", state=" + state 
-                + '}';
-    }
-    
+    return "Journal{" + "idJournal=" + idJournal
+            + ", nameJournal=" + nameJournal
+            + ", editorial=" + (editorial != null ? editorial.getNameEditorial() : "N/A")
+            + ", yearOfPublication=" + yearOfPublication
+            + ", price=" + price
+            + ", stock=" + stock
+            + ", state=" + state + '}';
+}
+
 }

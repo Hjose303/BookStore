@@ -50,7 +50,7 @@ public class Purchase {
         return total;
     }
     
-    public float getTotalPurchasesByPeriod(LocalDate startDate, LocalDate endDate,
+    public static float getTotalPurchasesByPeriod(LocalDate startDate, LocalDate endDate,
             ArrayList<Purchase> allPurchases) {
         float total = 0;
         if (allPurchases != null && startDate != null && endDate != null) {

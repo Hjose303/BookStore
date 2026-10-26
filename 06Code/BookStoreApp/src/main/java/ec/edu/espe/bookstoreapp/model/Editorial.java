@@ -39,4 +39,9 @@ public class Editorial {
         this.nameEditorial = nameEditorial;
     }
     
+    @Override
+    public String toString() {
+    return "Editorial{" + "idEditorial=" + idEditorial
+            + ", nameEditorial=" + nameEditorial + '}';
+}
 }
