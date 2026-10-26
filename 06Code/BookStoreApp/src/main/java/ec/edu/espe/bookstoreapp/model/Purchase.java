@@ -1,32 +1,92 @@
 package ec.edu.espe.bookstoreapp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  *
  * @author Julian Olalla, 404 Founders, @ESPE
  */
 public class Purchase {
+    private static int idCurrent;
     private int idPurchase;
     private LocalDate date;
     private float totalPurchase;
     
     private Supplier supplier;
+    private ArrayList<PurchaseDetail> details;
 
-    public Purchase(int idPurchase, LocalDate date, float totalPurchase, Supplier supplier) {
-        this.idPurchase = idPurchase;
-        this.date = date;
-        this.totalPurchase = totalPurchase;
+    public Purchase(LocalDate date, Supplier supplier) {
+        this.idPurchase = idCurrent++;
+        this.date = date;        
         this.supplier = supplier;
+        this.details = new ArrayList<>();
+        this.totalPurchase = 0;
+    }
+    
+    public void addDetailPurchase(PurchaseDetail detail) {
+        if (detail != null && detail.getStockPurchase() > 0) {
+            details.add(detail);
+            
+            Book book = detail.getBook();
+            if (book != null){
+                book.setStock(book.getStock() + detail.getStockPurchase());
+            }
+            
+            Journal journal = detail.getJournal();
+            if (journal != null){
+                journal.setStock(journal.getStock() + detail.getStockPurchase());
+            }
+            computeTotalPurchase();
+        }
+    }
+    
+    public float computeTotalPurchase() {
+        float total = 0;
+        for (PurchaseDetail detail : getDetails()) {
+            total += detail.computeSubtotal();
+        }
+        this.totalPurchase = total;
+        return total;
+    }
+    
+    public float getTotalPurchasesByPeriod(LocalDate startDate, LocalDate endDate,
+            ArrayList<Purchase> allPurchases) {
+        float total = 0;
+        if (allPurchases != null && startDate != null && endDate != null) {
+            for (Purchase purchase : allPurchases) {
+                LocalDate purchaseDate = purchase.getDate();
+                if (purchaseDate != null
+                        && !purchaseDate.isBefore(startDate)
+                        && !purchaseDate.isAfter(endDate)) {
+                    total += purchase.getTotalPurchase();
+                }
+            }
+        }
+        return total;
     }
 
     @Override
     public String toString() {
-        return "Purchase{" + "idPurchase=" + getIdPurchase() + ", date=" + getDate() + ", totalPurchase=" + getTotalPurchase() + ", supplier=" + getSupplier() + '}';
+        return "Purchase{" + "idPurchase=" + getIdPurchase() 
+                + ", date=" + getDate() 
+                + ", totalPurchase=" + getTotalPurchase() 
+                + ", supplier=" + getSupplier() 
+                + ", details=" + getDetails() + '}';
     }
-    
-    public PurchaseDetail addDetailPurchase(detail : PurchaseDetail){
-        
+
+    /**
+     * @return the idCurrent
+     */
+    public static int getIdCurrent() {
+        return idCurrent;
+    }
+
+    /**
+     * @param aIdCurrent the idCurrent to set
+     */
+    public static void setIdCurrent(int aIdCurrent) {
+        idCurrent = aIdCurrent;
     }
 
     /**
@@ -83,5 +143,20 @@ public class Purchase {
      */
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }        
+    }
+
+    /**
+     * @return the details
+     */
+    public ArrayList<PurchaseDetail> getDetails() {
+        return details;
+    }
+
+    /**
+     * @param details the details to set
+     */
+    public void setDetails(ArrayList<PurchaseDetail> details) {
+        this.details = details;
+    }                
+    
 }
