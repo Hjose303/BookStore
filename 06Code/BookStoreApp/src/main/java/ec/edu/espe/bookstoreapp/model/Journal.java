@@ -1,4 +1,3 @@
-
 package ec.edu.espe.bookstoreapp.model;
 
 import java.time.LocalDate;
@@ -18,16 +17,7 @@ public class Journal {
     private int stock;
     private String state;
     
-    public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournals) {
-        ArrayList<Journal> results = new ArrayList<>();
-        if (allJournals != null) {
-            results = allJournals.stream()
-                    .filter(j -> j.getNameJournal()!= null
-                    && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
+    
     
     public Journal(String nameJournal, Editorial editorial, LocalDate yearOfPublication, float price, int stock, String state) {
         this.nameJournal = nameJournal;
@@ -38,11 +28,7 @@ public class Journal {
         this.state = state;
         this.idJournal = id++;
     }
-    
-    public boolean validateStock() {
-        return stock > 0;
-    }
-        
+
     public static int getId() {
         return id;
     }
@@ -105,17 +91,23 @@ public class Journal {
 
     public void setState(String state) {
         this.state = state;
-    }   
+    }
     
+    public boolean validateStock() {
+    return stock > 0;
+    }
+
     @Override
     public String toString() {
-    return "Journal{" + "idJournal=" + idJournal
-            + ", nameJournal=" + nameJournal
-            + ", editorial=" + (editorial != null ? editorial.getNameEditorial() : "N/A")
-            + ", yearOfPublication=" + yearOfPublication
-            + ", price=" + price
-            + ", stock=" + stock
-            + ", state=" + state + '}';
-}
-
+        return "Journal{" 
+                + "idJournal=" + idJournal 
+                + ", nameJournal=" + nameJournal 
+                + ", editorial=" + editorial 
+                + ", yearOfPublication=" + yearOfPublication 
+                + ", price=" + price 
+                + ", stock=" + stock 
+                + ", state=" + state 
+                + '}';
+    }
+    
 }

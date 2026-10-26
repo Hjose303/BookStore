@@ -3,22 +3,16 @@ package ec.edu.espe.bookstoreapp.view;
 import ec.edu.espe.bookstoreapp.model.Author;
 import ec.edu.espe.bookstoreapp.model.Book;
 import ec.edu.espe.bookstoreapp.model.Editorial;
-<<<<<<< HEAD
+import ec.edu.espe.bookstoreapp.model.EducationalLevel;
 import ec.edu.espe.bookstoreapp.model.Journal;
+import ec.edu.espe.bookstoreapp.model.LiteraryGenre;
 import ec.edu.espe.bookstoreapp.model.Purchase;
 import ec.edu.espe.bookstoreapp.model.PurchaseDetail;
 import ec.edu.espe.bookstoreapp.model.Supplier;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-=======
-import ec.edu.espe.bookstoreapp.model.EducationalLevel;
-import ec.edu.espe.bookstoreapp.model.Journal;
-import ec.edu.espe.bookstoreapp.model.LiteraryGenre;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.stream.Collectors;
->>>>>>> ee8afe0557856fd9b5c1fe32f1dc3686acd38d45
 
 /**
  *
@@ -27,12 +21,6 @@ import java.util.stream.Collectors;
 public class View {
 
     private static Scanner input = new Scanner(System.in);
-
-    private static ArrayList<Book> books = new ArrayList<>();
-    private static ArrayList<Journal> journals = new ArrayList<>();
-    private static ArrayList<Editorial> editorials = new ArrayList<>();
-    private static ArrayList<Supplier> suppliers = new ArrayList<>();
-    private static ArrayList<Purchase> purchases = new ArrayList<>();
 
     public static void showMenu() {
         System.out.println("""
@@ -54,22 +42,23 @@ public class View {
                            """);
     }
 
-    public static void showChoseOption(int opc, ArrayList<Book> books, ArrayList<Journal> journals) {
+    public static void showChoseOption(int opc, ArrayList<Book> books,
+            ArrayList<Journal> journals, ArrayList<Purchase> purchases) {
         switch (opc) {
             case 1 ->
                 checkAvailableBooks();
             case 2 ->
-                checkAvailableJounaries();
+                checkAvailableJounaries(journals);
             case 3 ->
                 makeANewSale();
             case 4 ->
-                AddNewProducts(books,journals);
+                AddNewProducts(books, journals, purchases);
             case 5 ->
                 searchBooks(books);
             case 6 ->
                 searchJournals(journals);
             case 7 ->
-                checkEconomicStatus();
+                checkEconomicStatus(purchases);
             case 8 ->
                 checkClientFrequency();
             default ->
@@ -83,11 +72,11 @@ public class View {
         System.out.println("==============================");
     }
 
-    public static void checkAvailableJounaries() {
+    public static void checkAvailableJounaries(ArrayList<Journal> inventory) {
         System.out.flush();
         System.out.println("Consulta de Revistas en Existencia");
         System.out.println("==============================");
-        for (Journal journal : journals) {
+        for (Journal journal : inventory) {
             if (journal.validateStock()) {
                 System.out.println(journal);
             }
@@ -100,7 +89,8 @@ public class View {
         System.out.println("==============================");
     }
 
-    public static void AddNewProducts(ArrayList<Book> inventoryBooks , ArrayList<Journal> inventoryJournal) {
+    public static void AddNewProducts(ArrayList<Book> inventoryBooks,
+            ArrayList<Journal> inventoryJournal, ArrayList<Purchase> purchases) {
         int opc;
         System.out.flush();
         System.out.println("Agregar Nuevos Productos");
@@ -110,20 +100,6 @@ public class View {
         System.out.println("3.Agregar una Compra");
         System.out.println("==============================");
         System.out.print("Ingrese una Opcion: ");
-<<<<<<< HEAD
-        opc = Integer.parseInt(input.nextLine());
-        switch (opc) {
-            case 1 -> {
-                addBooks();
-            }
-            case 2 -> {
-                addJournals();
-            }
-            case 3 -> {
-                addPurchase();
-            }
-            default -> System.out.println("Opcion no valida");
-=======
         try {
             opc = Integer.parseInt(input.nextLine());
             switch (opc) {
@@ -131,26 +107,21 @@ public class View {
                     addBooks(inventoryBooks);
                 }
                 case 2 -> {
-
+                    addJournals(inventoryJournal);
                 }
                 case 3 -> {
-
+                    addPurchase(inventoryBooks, inventoryJournal, purchases);
                 }
                 default ->
-                    throw new AssertionError();
+                    System.out.println("Opcion no valida");
             }
         } catch (NumberFormatException e) {
 
->>>>>>> ee8afe0557856fd9b5c1fe32f1dc3686acd38d45
         }
-        
+
     }
 
-<<<<<<< HEAD
-    public static void addBooks() {
-=======
     public static void addBooks(ArrayList<Book> inventory) {
->>>>>>> ee8afe0557856fd9b5c1fe32f1dc3686acd38d45
         String title;
         String authorName;
         String option;
@@ -164,11 +135,36 @@ public class View {
 
         System.out.println("Agregar Libros: ");
         System.out.println("========================================");
-<<<<<<< HEAD
+        System.out.print("Ingrese el Titulo del Libro:  ");
+        title = input.nextLine();
+        do {
+            System.out.print("Ingrese el Nombre del Autor: ");
+            authorName = input.nextLine();
+            authors.add(new Author(authorName));
+            System.out.print("¿Desea agregar otro autor para este libro? (s/n): ");
+            option = input.nextLine();
+        } while (option.equalsIgnoreCase("s"));
+        System.out.print("Ingrese el Nombre de la Editorial: ");
+        editorialName = input.nextLine();
+        editorial = new Editorial(editorialName);
+        System.out.print("Ingrese el Precio $: ");
+        price = Float.parseFloat(input.nextLine());
+        System.out.print("Ingrese el Estado del Libro: ");
+        state = input.nextLine();
+        System.out.println("Ingrese el Genero Literario: ");
+        Genre = input.nextLine();
+        LiteraryGenre literaryGenre = new LiteraryGenre(Genre);
+        System.out.print("Ingrese el Nivel Educativo del Libro: ");
+        eduLevel = input.nextLine();
+        EducationalLevel educationalLevel = new EducationalLevel(eduLevel);
+        Book newBook = new Book(title, authors, editorial, price, 0, state, literaryGenre, educationalLevel);
+        inventory.add(newBook);
+        System.out.println("========================================");
+        System.out.println("¡Libro agregado exitosamente al inventario!");
 
     }
 
-    public static void addJournals() {
+    public static void addJournals(ArrayList<Journal> inventory) {
         System.out.println("Agregar Revistas: ");
         System.out.println("========================================");
 
@@ -178,7 +174,6 @@ public class View {
         System.out.print("Nombre de la editorial: ");
         String editorialName = input.nextLine();
         Editorial editorial = new Editorial(editorialName);
-        editorials.add(editorial);
 
         System.out.print("Anio de publicacion: ");
         int year = Integer.parseInt(input.nextLine());
@@ -187,30 +182,28 @@ public class View {
         System.out.print("Precio: ");
         float price = Float.parseFloat(input.nextLine());
 
-        System.out.print("Stock: ");
-        int stock = Integer.parseInt(input.nextLine());
-
         System.out.print("Estado: ");
         String state = input.nextLine();
 
-        Journal journal = new Journal(name, editorial, yearOfPublication, price, stock, state);
-        journals.add(journal);
-        System.out.println("Revista registrada: " + journal);
+        Journal journal = new Journal(name, editorial, yearOfPublication, price, 0, state);
+        inventory.add(journal);
+        System.out.println("========================================");
+        System.out.println("¡Revista agregada exitosamente al inventario!");
     }
 
-    public static void addPurchase() {
+    public static void addPurchase(ArrayList<Book> books, ArrayList<Journal> journals,
+            ArrayList<Purchase> purchases) {
         System.out.println("Agregar una Compra: ");
         System.out.println("========================================");
 
         System.out.print("Nombre del proveedor: ");
         String supplierName = input.nextLine();
         Supplier supplier = new Supplier(supplierName);
-        suppliers.add(supplier);
 
         Purchase purchase = new Purchase(LocalDate.now(), supplier);
 
-        String again = "si";
-        while (again.equalsIgnoreCase("si")) {
+        String again = "s";
+        while (again.equalsIgnoreCase("s")) {
             System.out.println("1.Comprar Libro");
             System.out.println("2.Comprar Revista");
             System.out.print("Ingrese una Opcion: ");
@@ -244,50 +237,16 @@ public class View {
             PurchaseDetail detail = new PurchaseDetail(quantity, price, book, journal);
             purchase.addDetailPurchase(detail);
 
-            System.out.print("Desea agregar otro producto (si/no): ");
+            System.out.print("¿Desea agregar otro producto? (s/n): ");
             again = input.nextLine();
         }
 
         purchases.add(purchase);
+        System.out.println("========================================");
         System.out.println("Compra registrada. Total: " + purchase.getTotalPurchase());
     }
 
-    public static void searchBooks() {
-=======
-        System.out.print("Ingrese el Titulo del Libro:  ");
-        title = input.nextLine();
-        do {
-            System.out.print("Ingrese el Nombre del Autor: ");
-            authorName = input.nextLine();
-            authors.add(new Author(authorName));
-            System.out.print("¿Desea agregar otro autor para este libro? (s/n): ");
-            option = input.nextLine();
-        } while (option.equalsIgnoreCase("s"));
-        System.out.print("Ingrese el Nombre de la Editorial: ");
-        editorialName = input.nextLine();
-        editorial = new Editorial(editorialName);
-        System.out.print("Ingrese el Precio $: ");
-        price = Float.parseFloat(input.nextLine());
-        System.out.print("Ingrese el Estado del Libro: ");
-        state = input.nextLine();
-        System.out.println("Ingrese el Genero Literario: ");
-        Genre = input.nextLine();
-        LiteraryGenre literaryGenre = new LiteraryGenre(Genre);
-        System.out.print("Ingrese el Nivel Educativo del Libro: ");
-        eduLevel = input.nextLine();
-        EducationalLevel educationalLevel = new EducationalLevel(eduLevel);
-        Book newBook = new Book(title, authors, editorial, price, 0, state, literaryGenre, educationalLevel);
-        inventory.add(newBook);
-        System.out.println("========================================");
-        System.out.println("¡Libro agregado exitosamente al inventario!");
-        
-
-    }
-    public static void addJournals(ArrayList<Journal> inventory){
-        
-    }
     public static void searchBooks(ArrayList<Book> inventory) {
->>>>>>> ee8afe0557856fd9b5c1fe32f1dc3686acd38d45
         System.out.flush();
         System.out.println("========================================");
         System.out.println("Buscar Libros: ");
@@ -301,7 +260,7 @@ public class View {
             case 1 -> {
                 System.out.print("Ingrese el Titulo del Libro");
                 String title = input.nextLine();
-                ArrayList<Book> results =searchBookByTitle(title, inventory);
+                ArrayList<Book> results = searchBookByTitle(title, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 results.toString();
@@ -309,14 +268,16 @@ public class View {
             case 2 -> {
                 System.out.print("Ingrese El Nombre del Autor: ");
                 String nameAuthor = input.nextLine();
-                ArrayList<Book> results =searchBookByAuthor(nameAuthor, inventory);
+                ArrayList<Book> results = searchBookByAuthor(nameAuthor, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 results.toString();
             }
-            default -> throw new AssertionError();
+            default ->
+                throw new AssertionError();
         }
     }
+
     public static ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
         ArrayList<Book> results = new ArrayList<>();
         if (allBooks != null) {
@@ -327,6 +288,7 @@ public class View {
         }
         return results;
     }
+
     public static ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
         ArrayList<Book> results = new ArrayList<>();
         if (allBooks != null) {
@@ -337,36 +299,31 @@ public class View {
         }
         return results;
     }
+
     public static void searchJournals(ArrayList<Journal> inventory) {
         System.out.flush();
         System.out.println("===========================================");
         System.out.println("Buscar Revistas: ");
         System.out.print("Ingrese el Nombre de la Revista: ");
-<<<<<<< HEAD
-        String name = input.nextLine();
-
-        ArrayList<Journal> results = Journal.searchJournalByTitle(name, journals);
+        String nameJournal = input.nextLine();
+        ArrayList<Journal> results = searchJournalByTitle(nameJournal, inventory);
         for (Journal journal : results) {
             System.out.println(journal);
         }
-=======
-        String nameJournal = input.nextLine();
-        ArrayList<Journal> results = searchJournalByTitle(nameJournal, inventory);
-        results.toString();
-        
     }
+
     public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
         ArrayList<Journal> results = new ArrayList<>();
         if (allJournal != null) {
             results = allJournal.stream()
-                    .filter(j -> j.getNameJournal()!= null
+                    .filter(j -> j.getNameJournal() != null
                     && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
         return results;
->>>>>>> ee8afe0557856fd9b5c1fe32f1dc3686acd38d45
     }
-    public static void checkEconomicStatus() {
+
+    public static void checkEconomicStatus(ArrayList<Purchase> purchases) {
         System.out.flush();
         System.out.println("Estado Economico");
         System.out.println("==============================");

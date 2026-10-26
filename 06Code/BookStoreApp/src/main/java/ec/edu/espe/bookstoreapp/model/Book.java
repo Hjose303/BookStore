@@ -43,7 +43,30 @@ public class Book {
         
     }
     
-    
+    @Override
+public String toString() {
+    String authorNames = "";
+    if (authors != null) {
+        for (int i = 0; i < authors.size(); i++) {
+            authorNames += authors.get(i).getName();
+            if (i < authors.size() - 1) {
+                authorNames += ", ";
+            }
+        }
+    }
+
+    return "Book{" + "idBook=" + idBook
+            + ", title=" + title
+            + ", authors=" + authorNames
+            + ", editorial=" + (editorial != null ? editorial.getNameEditorial() : "N/A")
+            + ", price=" + price
+            + ", stock=" + stock
+            + ", state=" + state
+            + ", genre=" + (literaryGenre != null ? literaryGenre.getLiteraryGenre() : "N/A")
+            + ", level=" + (educationalLevel != null ? educationalLevel.getNameEducationalLevel() : "N/A")
+            + '}';
+    }
+
     
     public static int getId() {
         return id;
