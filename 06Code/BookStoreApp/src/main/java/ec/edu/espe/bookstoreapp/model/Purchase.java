@@ -75,9 +75,7 @@ public class Purchase {
                 + ", details=" + getDetails() + '}';
     }
     
-    public PurchaseDetail addDetailPurchase(detail : PurchaseDetail){
-        
-    }
+
 
     /**
      * @return the idPurchase
