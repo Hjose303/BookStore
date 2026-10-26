@@ -2,12 +2,17 @@ package ec.edu.espe.bookstoreapp.view;
 
 import ec.edu.espe.bookstoreapp.model.Author;
 import ec.edu.espe.bookstoreapp.model.Book;
+import ec.edu.espe.bookstoreapp.model.Customer;
 import ec.edu.espe.bookstoreapp.model.Editorial;
 import ec.edu.espe.bookstoreapp.model.EducationalLevel;
 import ec.edu.espe.bookstoreapp.model.Journal;
 import ec.edu.espe.bookstoreapp.model.LiteraryGenre;
+import ec.edu.espe.bookstoreapp.model.Payment;
+import ec.edu.espe.bookstoreapp.model.PaymentMethod;
 import ec.edu.espe.bookstoreapp.model.Purchase;
 import ec.edu.espe.bookstoreapp.model.PurchaseDetail;
+import ec.edu.espe.bookstoreapp.model.Sale;
+import ec.edu.espe.bookstoreapp.model.SaleDetail;
 import ec.edu.espe.bookstoreapp.model.Supplier;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,14 +48,15 @@ public class View {
     }
 
     public static void showChoseOption(int opc, ArrayList<Book> books,
-            ArrayList<Journal> journals, ArrayList<Purchase> purchases) {
+            ArrayList<Journal> journals, ArrayList<Purchase> purchases,
+            ArrayList<Customer> customers, ArrayList<Sale> sales) {
         switch (opc) {
             case 1 ->
                 checkAvailableBooks(books);
             case 2 ->
                 checkAvailableJounaries(journals);
             case 3 ->
-                makeANewSale();
+                makeANewSale(books, journals, customers, sales);
             case 4 ->
                 AddNewProducts(books, journals, purchases);
             case 5 ->
@@ -58,9 +64,9 @@ public class View {
             case 6 ->
                 searchJournals(journals);
             case 7 ->
-                checkEconomicStatus(purchases);
+                checkEconomicStatus(purchases, sales);
             case 8 ->
-                checkClientFrequency();
+                checkClientFrequency(customers);
             default ->
                 System.exit(0);
         }
@@ -70,8 +76,15 @@ public class View {
         System.out.flush();
         System.out.println("Consultar Libros en Existencia");
         System.out.println("==============================");
-        for (Book book : inventory) {        
-            System.out.println(book);        
+        if (inventory.isEmpty()) {
+            System.out.println("No hay libros registrados en el inventario.");
+            return;
+        }
+        for (Book book : inventory) {
+            if (book.validateStock()) {
+                System.out.println("ID: " + book.getIdBook() + " | Título: " + book.getTitle() 
+                        + " | Precio: $" + book.getPrice() + " | Stock: " + book.getStock());
+            }
         }
     }
 
@@ -79,15 +92,137 @@ public class View {
         System.out.flush();
         System.out.println("Consulta de Revistas en Existencia");
         System.out.println("==============================");
-        for (Journal journal : inventory) {            
-                System.out.println(journal);            
+        if (inventory.isEmpty()) {
+            System.out.println("No hay revistas registradas en el inventario.");
+            return;
+        }
+        for (Journal journal : inventory) {
+            System.out.println(journal);
         }
     }
 
-    public static void makeANewSale() {
+    public static void makeANewSale(ArrayList<Book> inventoryBooks, ArrayList<Journal> inventoryJournals,
+            ArrayList<Customer> customers, ArrayList<Sale> sales) {
         System.out.flush();
         System.out.println("Realizar una Nueva Venta");
         System.out.println("==============================");
+
+        // 1. Datos del Cliente
+        System.out.print("Ingrese el Nombre del Cliente: ");
+        String customerName = input.nextLine();
+        
+        Customer customer = null;
+        for (Customer c : customers) {
+            if (c.getName().equalsIgnoreCase(customerName)) {
+                customer = c;
+                break;
+            }
+        }
+        if (customer == null) {
+            customer = new Customer(customerName);
+            customers.add(customer);
+        }
+        customer.addVisit(LocalDate.now());
+
+        // 2. Método de Pago
+        System.out.print("Ingrese el Método de Pago (Efectivo/Tarjeta/Transferencia): ");
+        String paymentMethodName = input.nextLine();
+        PaymentMethod paymentMethod = new PaymentMethod(paymentMethodName);
+
+        // 3. Crear Venta temporal
+        System.out.print("Ingrese el Tipo de Venta (Factura/Nota de Venta): ");
+        String typeSale = input.nextLine();
+        Sale sale = new Sale(LocalDate.now(), customer, typeSale, null);
+
+        // 4. Agregar Productos a la Venta
+        boolean addingProducts = true;
+        while (addingProducts) {
+            System.out.println("\nSeleccione Tipo de Producto a vender:");
+            System.out.println("1. Libro");
+            System.out.println("2. Revista");
+            System.out.print("Opción: ");
+            int optionProduct = Integer.parseInt(input.nextLine());
+
+            if (optionProduct == 1) {
+                if (inventoryBooks.isEmpty()) {
+                    System.out.println("No hay libros registrados en el inventario.");
+                } else {
+                    System.out.println("--- Libros Disponibles ---");
+                    for (int i = 0; i < inventoryBooks.size(); i++) {
+                        Book b = inventoryBooks.get(i);
+                        System.out.println(i + ". " + b.getTitle() + " | Precio: $" + b.getPrice() + " | Stock: " + b.getStock());
+                    }
+                    System.out.print("Número del libro: ");
+                    int pos = Integer.parseInt(input.nextLine());
+
+                    if (pos >= 0 && pos < inventoryBooks.size()) {
+                        Book selectedBook = inventoryBooks.get(pos);
+                        System.out.print("Ingrese la cantidad a vender: ");
+                        int qty = Integer.parseInt(input.nextLine());
+
+                        SaleDetail detail = new SaleDetail(selectedBook, null, qty);
+                        if (detail.validateProduct()) {
+                            sale.addDetail(detail);
+                            System.out.println("¡Libro agregado a la venta!");
+                        } else {
+                            System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+                        }
+                    }
+                }
+            } else if (optionProduct == 2) {
+                if (inventoryJournals.isEmpty()) {
+                    System.out.println("No hay revistas registradas en el inventario.");
+                } else {
+                    System.out.println("--- Revistas Disponibles ---");
+                    for (int i = 0; i < inventoryJournals.size(); i++) {
+                        Journal j = inventoryJournals.get(i);
+                        System.out.println(i + ". " + j.getNameJournal() + " | Precio: $" + j.getPrice() + " | Stock: " + j.getStock());
+                    }
+                    System.out.print("Número de la revista: ");
+                    int pos = Integer.parseInt(input.nextLine());
+
+                    if (pos >= 0 && pos < inventoryJournals.size()) {
+                        Journal selectedJournal = inventoryJournals.get(pos);
+                        System.out.print("Ingrese la cantidad a vender: ");
+                        int qty = Integer.parseInt(input.nextLine());
+
+                        SaleDetail detail = new SaleDetail(null, selectedJournal, qty);
+                        if (detail.validateProduct()) {
+                            sale.addDetail(detail);
+                            System.out.println("¡Revista agregada a la venta!");
+                        } else {
+                            System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+                        }
+                    }
+                }
+            }
+
+            System.out.print("¿Desea agregar otro producto a esta venta? (s/n): ");
+            String continueOpt = input.nextLine();
+            if (!continueOpt.equalsIgnoreCase("s")) {
+                addingProducts = false;
+            }
+        }
+
+        // 5. Procesar Pago
+        float totalSale = sale.computeTotal();
+        System.out.println("\nTotal de la venta: $" + totalSale);
+        System.out.print("Ingrese el monto abonado por el cliente $: ");
+        float amountPaid = Float.parseFloat(input.nextLine());
+
+        Payment payment = new Payment(amountPaid, paymentMethod);
+        if (payment.validatePayment(totalSale)) {
+            sale.setPayment(payment);
+            sales.add(sale);
+            float cambio = amountPaid - totalSale;
+            System.out.println("==========================================");
+            System.out.println("¡Venta procesada con éxito!");
+            System.out.println("Cambio a entregar: $" + cambio);
+            System.out.println(sale.generateSalesReport(LocalDate.now(), LocalDate.now()));
+            System.out.println("==========================================");
+        } else {
+            System.out.println("ERROR: El monto abonado es menor al total de la venta ($" + totalSale + "). Venta cancelada.");
+        }
     }
 
     public static void AddNewProducts(ArrayList<Book> inventoryBooks,
@@ -119,7 +254,6 @@ public class View {
         } catch (NumberFormatException e) {
 
         }
-
     }
 
     public static void addBooks(ArrayList<Book> inventory) {
@@ -162,7 +296,6 @@ public class View {
         inventory.add(newBook);
         System.out.println("========================================");
         System.out.println("¡Libro agregado exitosamente al inventario!");
-
     }
 
     public static void addJournals(ArrayList<Journal> inventory) {
@@ -252,19 +385,21 @@ public class View {
         System.out.println("========================================");
         System.out.println("Buscar Libros: ");
         System.out.println("========================================");
-        System.out.println("1. Buscar por Autor");
-        System.out.println("2. Buscar Por Titulo");
+        System.out.println("1. Buscar por Titulo");
+        System.out.println("2. Buscar Por Autor");
         System.out.println("========================================");
         System.out.print("Ingrese una Opcion: ");
         int opc = Integer.parseInt(input.nextLine());
         switch (opc) {
             case 1 -> {
-                System.out.print("Ingrese el Titulo del Libro");
+                System.out.print("Ingrese el Titulo del Libro: ");
                 String title = input.nextLine();
                 ArrayList<Book> results = searchBookByTitle(title, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
-                results.toString();
+                for (Book b : results) {
+                    System.out.println("ID: " + b.getIdBook() + " | Título: " + b.getTitle() + " | Precio: $" + b.getPrice());
+                }
             }
             case 2 -> {
                 System.out.print("Ingrese El Nombre del Autor: ");
@@ -272,7 +407,9 @@ public class View {
                 ArrayList<Book> results = searchBookByAuthor(nameAuthor, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
-                results.toString();
+                for (Book b : results) {
+                    System.out.println("ID: " + b.getIdBook() + " | Título: " + b.getTitle() + " | Precio: $" + b.getPrice());
+                }
             }
             default ->
                 throw new AssertionError();
@@ -324,7 +461,7 @@ public class View {
         return results;
     }
 
-    public static void checkEconomicStatus(ArrayList<Purchase> purchases) {
+    public static void checkEconomicStatus(ArrayList<Purchase> purchases, ArrayList<Sale> sales) {
         System.out.flush();
         System.out.println("Estado Economico");
         System.out.println("==============================");
@@ -335,12 +472,32 @@ public class View {
         System.out.print("Fecha fin (AAAA-MM-DD): ");
         LocalDate end = LocalDate.parse(input.nextLine());
 
-        float total = Purchase.getTotalPurchasesByPeriod(start, end, purchases);
-        System.out.println("Total gastado en compras: " + total);
+        float totalPurchases = Purchase.getTotalPurchasesByPeriod(start, end, purchases);
+        float totalSales = 0;
+        for (Sale s : sales) {
+            if (s.getDate() != null && !s.getDate().isBefore(start) && !s.getDate().isAfter(end)) {
+                totalSales += s.computeTotal();
+            }
+        }
+
+        System.out.println("Total Ingresos por Ventas: $" + totalSales);
+        System.out.println("Total Gastos por Compras:  $" + totalPurchases);
+        System.out.println("Balance Neto (Ganancia):   $" + (totalSales - totalPurchases));
     }
 
-    public static void checkClientFrequency() {
+    public static void checkClientFrequency(ArrayList<Customer> customers) {
         System.out.flush();
         System.out.println("Verificar Frecuencia del Cliente");
+        System.out.println("==============================");
+        if (customers.isEmpty()) {
+            System.out.println("No existen clientes registrados aún.");
+            return;
+        }
+
+        for (Customer c : customers) {
+            System.out.println("Cliente: " + c.getName() 
+                    + " | Visitas Registradas: " + c.getVisitHistory().size() 
+                    + " | Frecuencia: " + c.getClientFrequency());
+        }
     }
 }
