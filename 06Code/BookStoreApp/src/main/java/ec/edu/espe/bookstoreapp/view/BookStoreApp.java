@@ -1,5 +1,9 @@
 package ec.edu.espe.bookstoreapp.view;
 
+import ec.edu.espe.bookstoreapp.model.Book;
+import ec.edu.espe.bookstoreapp.model.Journal;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -12,7 +16,8 @@ public class BookStoreApp {
         String optionContinue;
         int opc;
         boolean controller = true;
-
+        ArrayList<Book> inventoryBook = new java.util.ArrayList<>();
+        ArrayList<Journal> inventoryJournal = new java.util.ArrayList<>();
         Scanner input = new Scanner(System.in);
 
         while (controller) {
@@ -21,7 +26,7 @@ public class BookStoreApp {
             
             try {
                 opc = Integer.parseInt(input.nextLine());
-                View.showChoseOption(opc);
+                View.showChoseOption(opc, inventoryBook, inventoryJournal);
             } catch (NumberFormatException e) {
                 while(controller){
                     System.out.println("Ingrese una Opcion Valida");
