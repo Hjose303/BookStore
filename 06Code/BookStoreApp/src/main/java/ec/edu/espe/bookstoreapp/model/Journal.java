@@ -28,6 +28,10 @@ public class Journal {
         this.state = state;
         this.idJournal = id++;
     }
+    
+    public boolean validateStock() {
+    return stock > 0;
+    }
 
     public static int getId() {
         return id;
@@ -91,11 +95,7 @@ public class Journal {
 
     public void setState(String state) {
         this.state = state;
-    }
-    
-    public boolean validateStock() {
-    return stock > 0;
-    }
+    }      
 
     @Override
     public String toString() {

@@ -46,7 +46,7 @@ public class View {
             ArrayList<Journal> journals, ArrayList<Purchase> purchases) {
         switch (opc) {
             case 1 ->
-                checkAvailableBooks();
+                checkAvailableBooks(books);
             case 2 ->
                 checkAvailableJounaries(journals);
             case 3 ->
@@ -66,20 +66,21 @@ public class View {
         }
     }
 
-    public static void checkAvailableBooks() {
+    public static void checkAvailableBooks(ArrayList<Book> inventory) {
         System.out.flush();
         System.out.println("Consultar Libros en Existencia");
         System.out.println("==============================");
+        for (Book book : inventory) {        
+            System.out.println(book);        
+        }
     }
 
     public static void checkAvailableJounaries(ArrayList<Journal> inventory) {
         System.out.flush();
         System.out.println("Consulta de Revistas en Existencia");
         System.out.println("==============================");
-        for (Journal journal : inventory) {
-            if (journal.validateStock()) {
-                System.out.println(journal);
-            }
+        for (Journal journal : inventory) {            
+                System.out.println(journal);            
         }
     }
 

@@ -44,7 +44,7 @@ public class Book {
     }
     
     @Override
-public String toString() {
+    public String toString() {
     String authorNames = "";
     if (authors != null) {
         for (int i = 0; i < authors.size(); i++) {
