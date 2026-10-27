@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ec.edu.espe.bookstoreapp.model;
 
 /**
@@ -15,9 +11,14 @@ public class SaleDetail {
     private Journal journal;
     private int quantityProduct;
 
-    public SaleDetail(Book book, Journal journal, int quantityProduct) {
+    public SaleDetail(Book book, int quantityProduct) {
         this.idDetail = idCurrent++;
-        this.book = book;
+        this.book = book;        
+        this.quantityProduct = quantityProduct;
+    }
+    
+    public SaleDetail(Journal journal, int quantityProduct) {
+        this.idDetail = idCurrent++;
         this.journal = journal;
         this.quantityProduct = quantityProduct;
     }

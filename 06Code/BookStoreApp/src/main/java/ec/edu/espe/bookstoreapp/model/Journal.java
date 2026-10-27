@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * @author Nestor Olivo, Found ERROR 404, @ESPE
  */
 public class Journal {
-    private static int id;
+    private static int idCurrent;
     private int idJournal;
     private String nameJournal;
     private Editorial editorial;
@@ -26,19 +26,19 @@ public class Journal {
         this.price = price;
         this.stock = stock;
         this.state = state;
-        this.idJournal = id++;
+        this.idJournal = idCurrent++;
     }
     
     public boolean validateStock() {
     return stock > 0;
     }
 
-    public static int getId() {
-        return id;
+    public static int getIdCurrent() {
+        return idCurrent;
     }
 
-    public static void setId(int id) {
-        Journal.id = id;
+    public static void setIdCurrent(int idCurrent) {
+        Journal.idCurrent = idCurrent;
     }
 
     public int getIdJournal() {

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * @author Nestor Olivo, Found ERROR 404, @ESPE
  */
 public class Book {
-    private static int id;
+    private static int idCurrent;
     private int idBook;
     private String title;
     private ArrayList<Author> authors;
@@ -21,8 +21,6 @@ public class Book {
     private EducationalLevel educationalLevel;
     
     
-    
-    
     public boolean validateStock() {
     return stock > 0;
     }
@@ -31,7 +29,7 @@ public class Book {
             float price, int stock, String state, LiteraryGenre literaryGenre, 
             EducationalLevel educationalLevel) {
         
-        this.idBook = id++;
+        this.idBook = idCurrent++;
         this.title = title;
         this.authors = authors;
         this.editorial = editorial;
@@ -68,12 +66,12 @@ public class Book {
     }
 
     
-    public static int getId() {
-        return id;
+    public static int getIdCurrent() {
+        return idCurrent;
     }
 
-    public static void setId(int id) {
-        Book.id = id;
+    public static void setIdCurrent(int idCurrent) {
+        Book.idCurrent = idCurrent;
     }
     
     public int getIdBook() {

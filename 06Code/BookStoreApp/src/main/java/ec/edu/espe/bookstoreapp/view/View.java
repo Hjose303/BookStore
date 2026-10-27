@@ -108,9 +108,25 @@ public class View {
         System.out.println("==============================");
 
         // 1. Datos del Cliente
+        Customer customer = findOrCreateCustomer(customers);
+
+        // 2. Método de Pago
+        PaymentMethod paymentMethod = askPaymentMethod();
+
+        // 3. Crear Venta temporal
+        Sale sale = createSale(customer);
+
+        // 4. Agregar Productos a la Venta
+        addProductsToSale(sale, inventoryBooks, inventoryJournals);
+
+        // 5. Procesar Pago
+        processPayment(sale, paymentMethod, sales);
+    }
+
+    private static Customer findOrCreateCustomer(ArrayList<Customer> customers) {
         System.out.print("Ingrese el Nombre del Cliente: ");
         String customerName = input.nextLine();
-        
+
         Customer customer = null;
         for (Customer c : customers) {
             if (c.getName().equalsIgnoreCase(customerName)) {
@@ -123,18 +139,23 @@ public class View {
             customers.add(customer);
         }
         customer.addVisit(LocalDate.now());
+        return customer;
+    }
 
-        // 2. Método de Pago
+    private static PaymentMethod askPaymentMethod() {
         System.out.print("Ingrese el Método de Pago (Efectivo/Tarjeta/Transferencia): ");
         String paymentMethodName = input.nextLine();
-        PaymentMethod paymentMethod = new PaymentMethod(paymentMethodName);
+        return new PaymentMethod(paymentMethodName);
+    }
 
-        // 3. Crear Venta temporal
+    private static Sale createSale(Customer customer) {
         System.out.print("Ingrese el Tipo de Venta (Factura/Nota de Venta): ");
         String typeSale = input.nextLine();
-        Sale sale = new Sale(LocalDate.now(), customer, typeSale, null);
+        return new Sale(LocalDate.now(), customer, typeSale);
+    }
 
-        // 4. Agregar Productos a la Venta
+    private static void addProductsToSale(Sale sale, ArrayList<Book> inventoryBooks,
+            ArrayList<Journal> inventoryJournals) {
         boolean addingProducts = true;
         while (addingProducts) {
             System.out.println("\nSeleccione Tipo de Producto a vender:");
@@ -144,57 +165,9 @@ public class View {
             int optionProduct = Integer.parseInt(input.nextLine());
 
             if (optionProduct == 1) {
-                if (inventoryBooks.isEmpty()) {
-                    System.out.println("No hay libros registrados en el inventario.");
-                } else {
-                    System.out.println("--- Libros Disponibles ---");
-                    for (int i = 0; i < inventoryBooks.size(); i++) {
-                        Book b = inventoryBooks.get(i);
-                        System.out.println(i + ". " + b.getTitle() + " | Precio: $" + b.getPrice() + " | Stock: " + b.getStock());
-                    }
-                    System.out.print("Número del libro: ");
-                    int pos = Integer.parseInt(input.nextLine());
-
-                    if (pos >= 0 && pos < inventoryBooks.size()) {
-                        Book selectedBook = inventoryBooks.get(pos);
-                        System.out.print("Ingrese la cantidad a vender: ");
-                        int qty = Integer.parseInt(input.nextLine());
-
-                        SaleDetail detail = new SaleDetail(selectedBook, null, qty);
-                        if (detail.validateProduct()) {
-                            sale.addDetail(detail);
-                            System.out.println("¡Libro agregado a la venta!");
-                        } else {
-                            System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
-                        }
-                    }
-                }
+                addBookToSale(sale, inventoryBooks);
             } else if (optionProduct == 2) {
-                if (inventoryJournals.isEmpty()) {
-                    System.out.println("No hay revistas registradas en el inventario.");
-                } else {
-                    System.out.println("--- Revistas Disponibles ---");
-                    for (int i = 0; i < inventoryJournals.size(); i++) {
-                        Journal j = inventoryJournals.get(i);
-                        System.out.println(i + ". " + j.getNameJournal() + " | Precio: $" + j.getPrice() + " | Stock: " + j.getStock());
-                    }
-                    System.out.print("Número de la revista: ");
-                    int pos = Integer.parseInt(input.nextLine());
-
-                    if (pos >= 0 && pos < inventoryJournals.size()) {
-                        Journal selectedJournal = inventoryJournals.get(pos);
-                        System.out.print("Ingrese la cantidad a vender: ");
-                        int qty = Integer.parseInt(input.nextLine());
-
-                        SaleDetail detail = new SaleDetail(null, selectedJournal, qty);
-                        if (detail.validateProduct()) {
-                            sale.addDetail(detail);
-                            System.out.println("¡Revista agregada a la venta!");
-                        } else {
-                            System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
-                        }
-                    }
-                }
+                addJournalToSale(sale, inventoryJournals);
             }
 
             System.out.print("¿Desea agregar otro producto a esta venta? (s/n): ");
@@ -203,8 +176,65 @@ public class View {
                 addingProducts = false;
             }
         }
+    }
 
-        // 5. Procesar Pago
+    private static void addBookToSale(Sale sale, ArrayList<Book> inventoryBooks) {
+        if (inventoryBooks.isEmpty()) {
+            System.out.println("No hay libros registrados en el inventario.");
+            return;
+        }
+        System.out.println("--- Libros Disponibles ---");
+        for (int i = 0; i < inventoryBooks.size(); i++) {
+            Book b = inventoryBooks.get(i);
+            System.out.println(i + ". " + b.getTitle() + " | Precio: $" + b.getPrice() + " | Stock: " + b.getStock());
+        }
+        System.out.print("Número del libro: ");
+        int pos = Integer.parseInt(input.nextLine());
+
+        if (pos >= 0 && pos < inventoryBooks.size()) {
+            Book selectedBook = inventoryBooks.get(pos);
+            System.out.print("Ingrese la cantidad a vender: ");
+            int qty = Integer.parseInt(input.nextLine());
+
+            SaleDetail detail = new SaleDetail(selectedBook, qty);
+            if (detail.validateProduct()) {
+                sale.addDetail(detail);
+                System.out.println("¡Libro agregado a la venta!");
+            } else {
+                System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+            }
+        }
+    }
+
+    private static void addJournalToSale(Sale sale, ArrayList<Journal> inventoryJournals) {
+        if (inventoryJournals.isEmpty()) {
+            System.out.println("No hay revistas registradas en el inventario.");
+            return;
+        }
+        System.out.println("--- Revistas Disponibles ---");
+        for (int i = 0; i < inventoryJournals.size(); i++) {
+            Journal j = inventoryJournals.get(i);
+            System.out.println(i + ". " + j.getNameJournal() + " | Precio: $" + j.getPrice() + " | Stock: " + j.getStock());
+        }
+        System.out.print("Número de la revista: ");
+        int pos = Integer.parseInt(input.nextLine());
+
+        if (pos >= 0 && pos < inventoryJournals.size()) {
+            Journal selectedJournal = inventoryJournals.get(pos);
+            System.out.print("Ingrese la cantidad a vender: ");
+            int qty = Integer.parseInt(input.nextLine());
+
+            SaleDetail detail = new SaleDetail(selectedJournal, qty);
+            if (detail.validateProduct()) {
+                sale.addDetail(detail);
+                System.out.println("¡Revista agregada a la venta!");
+            } else {
+                System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+            }
+        }
+    }
+
+    private static void processPayment(Sale sale, PaymentMethod paymentMethod, ArrayList<Sale> sales) {
         float totalSale = sale.computeTotal();
         System.out.println("\nTotal de la venta: $" + totalSale);
         System.out.print("Ingrese el monto abonado por el cliente $: ");

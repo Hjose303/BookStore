@@ -16,12 +16,11 @@ public class Sale {
     private Payment payment;
     private ArrayList<SaleDetail> details;
 
-    public Sale(LocalDate date, Customer customer, String typeSale, Payment payment) {
+    public Sale(LocalDate date, Customer customer, String typeSale) {
         this.idSale = idCurrent++;
         this.date = date;
         this.customer = customer;
-        this.typeSale = typeSale;
-        this.payment = payment;
+        this.typeSale = typeSale;        
         this.details = new ArrayList<>();
     }
 
