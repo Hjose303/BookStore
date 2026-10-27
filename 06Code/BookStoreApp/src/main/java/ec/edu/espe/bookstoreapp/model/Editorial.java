@@ -3,7 +3,7 @@ package ec.edu.espe.bookstoreapp.model;
 
 /**
  *
- * @author Nestor Olivo, Found ERROR 404, @ESPE
+ * @author Nestor Olivo, 404 Founders, @ESPE
  */
 public class Editorial {
     private static int idCurrent;

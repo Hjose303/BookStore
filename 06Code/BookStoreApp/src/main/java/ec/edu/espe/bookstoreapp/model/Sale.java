@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Dennis Noboa, 404 Founder, @ESPE
+ * @author Dennis Noboa, 404 Founders, @ESPE
  */
 public class Sale {
     private static int idCurrent;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Dennis Noboa, 404 Founder, @ESPE
+ * @author Dennis Noboa, 404 Founders, @ESPE
  */
 public class Customer {
     private static int idCurrent;

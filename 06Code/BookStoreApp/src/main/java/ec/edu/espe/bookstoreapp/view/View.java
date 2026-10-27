@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Nestor Olivo, Found ERROR 404, @ESPE
+ * @author Nestor Olivo, 404 Founders, @ESPE
  */
 public class View {
 

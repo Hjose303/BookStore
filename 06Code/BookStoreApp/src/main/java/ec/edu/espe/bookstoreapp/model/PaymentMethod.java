@@ -2,7 +2,7 @@ package ec.edu.espe.bookstoreapp.model;
 
 /**
  *
- * @author Dennis Noboa, 404 Founder, @ESPE
+ * @author Dennis Noboa, 404 Founders, @ESPE
  */
 public class PaymentMethod {
     private int idCurrent;
