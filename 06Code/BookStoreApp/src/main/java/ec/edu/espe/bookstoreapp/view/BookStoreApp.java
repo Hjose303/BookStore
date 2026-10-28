@@ -21,31 +21,27 @@ public class BookStoreApp {
         String optionContinue;
         int opc;
         boolean controller = true;
-        ArrayList<Book> inventoryBook= JsonPersistence.loadList("books.json",new TypeToken<ArrayList<Book>>() {});
+        
+        ArrayList<Book> inventoryBook = JsonPersistence.loadList("books.json", new TypeToken<ArrayList<Book>>() {});
+        ArrayList<Journal> inventoryJournal = JsonPersistence.loadList("journals.json", new TypeToken<ArrayList<Journal>>() {});
 
-        ArrayList<Journal> inventoryJournal= JsonPersistence.loadList("journals.json",new TypeToken<ArrayList<Journal>>() {});
+        ArrayList<Purchase> purchases = JsonPersistence.loadList(
+                "purchases.json",
+                new TypeToken<ArrayList<Purchase>>() {}
+        );
 
-        ArrayList<Purchase> purchases
-                = JsonPersistence.loadList(
-                        "purchases.json",
-                        new TypeToken<ArrayList<Purchase>>() {
-                }
-                );
+        ArrayList<Customer> customers = JsonPersistence.loadList(
+                "customers.json",
+                new TypeToken<ArrayList<Customer>>() {}
+        );
 
-        ArrayList<Customer> customers
-                = JsonPersistence.loadList(
-                        "customers.json",
-                        new TypeToken<ArrayList<Customer>>() {
-                }
-                );
+        ArrayList<Sale> sales = JsonPersistence.loadList(
+                "sales.json",
+                new TypeToken<ArrayList<Sale>>() {}
+        );
 
-        ArrayList<Sale> sales
-                = JsonPersistence.loadList(
-                        "sales.json",
-                        new TypeToken<ArrayList<Sale>>() {
-                }
-                );
         Scanner input = new Scanner(System.in);
+        
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             JsonPersistence.saveList("books.json", inventoryBook);
             JsonPersistence.saveList("journals.json", inventoryJournal);
@@ -53,6 +49,7 @@ public class BookStoreApp {
             JsonPersistence.saveList("customers.json", customers);
             JsonPersistence.saveList("sales.json", sales);
         }));
+
         while (controller) {
             View.showMenu();
 
@@ -60,15 +57,14 @@ public class BookStoreApp {
                 opc = View.askMenuOption();
                 View.showChoseOption(opc, inventoryBook, inventoryJournal, purchases, customers, sales);
             } catch (NumberFormatException e) {
-                while (controller) {
+                while (true) {
                     optionContinue = View.askRetry();
                     if (optionContinue.equalsIgnoreCase("si")) {
-                        controller = false;
+                        break;
                     } else if (optionContinue.equalsIgnoreCase("no")) {
                         System.exit(0);
                     }
                 }
-                controller = true;
             }
         }
     }

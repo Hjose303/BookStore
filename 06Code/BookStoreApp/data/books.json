@@ -17,7 +17,7 @@
       "nameEditorial": "NAN"
     },
     "price": 10.0,
-    "stock": 7,
+    "stock": 5,
     "state": "Usado",
     "literaryGenre": {
       "idLiteraryGenre": 0,
@@ -42,7 +42,7 @@
       "nameEditorial": "Schaum"
     },
     "price": 15.0,
-    "stock": 12,
+    "stock": 9,
     "state": "Usado",
     "literaryGenre": {
       "idLiteraryGenre": 0,

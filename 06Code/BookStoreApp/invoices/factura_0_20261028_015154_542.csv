@@ -1,0 +1,14 @@
+﻿sep=;
+LIBRERIA OLIVO CULTURAL
+Numero de venta;0
+Fecha;2026-10-28
+Cliente;""
+Tipo de venta;"nota de venta"
+Metodo de pago;"efectivo"
+
+Tipo de producto;Codigo;Producto;Cantidad;Precio unitario;Subtotal
+"Libro";"0";"Geometria Analitica";2;15.00;30.00
+
+TOTAL DE LA VENTA;;;;;30.00
+Monto recibido;30.00
+Cambio;0.00

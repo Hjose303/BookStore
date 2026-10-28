@@ -21,12 +21,39 @@ import java.util.Map;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-/**
- *
- * @author Julian Olalla, 404 Founders, @ESPE
- */
+
 public class Operations {
 
+    // ==========================================
+    // MÉTODOS DE VALIDACIÓN REQUERIDOS POR VIEW
+    // ==========================================
+    public static void requireInRange(int value, int min, int max, String fieldName) throws InvalidValueException {
+        if (value < min || value > max) {
+            throw new InvalidValueException("El campo " + fieldName + " debe estar entre " + min + " y " + max + ".");
+        }
+    }
+
+    public static void requirePositive(int value, String fieldName) throws InvalidValueException {
+        if (value <= 0) {
+            throw new InvalidValueException("El campo " + fieldName + " debe ser mayor a cero.");
+        }
+    }
+
+    public static void requirePositive(float value, String fieldName) throws InvalidValueException {
+        if (value <= 0) {
+            throw new InvalidValueException("El campo " + fieldName + " debe ser mayor a cero.");
+        }
+    }
+
+    public static void requireNonNegative(float value, String fieldName) throws InvalidValueException {
+        if (value < 0) {
+            throw new InvalidValueException("El campo " + fieldName + " no puede ser negativo.");
+        }
+    }
+
+    // ==========================================
+    // BÚSQUEDAS
+    // ==========================================
     public static ArrayList<Book> searchBookByTitle(
             String titleQuery, ArrayList<Book> allBooks) {
 
@@ -74,6 +101,9 @@ public class Operations {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    // ==========================================
+    // AGREGAR PRODUCTOS
+    // ==========================================
     public static void addBook(
             ArrayList<Book> inventory,
             String title,
@@ -167,17 +197,19 @@ public class Operations {
         }
 
         Editorial editorial = new Editorial(editorialName);
-        inventory.add(new Journal(name, editorial, yearOfPublication, price, 0, state));
+        inventory.add(new Journal(name, editorial, yearOfPublication, price, initialStock, state));
     }
     
-    //Clients
+    // ==========================================
+    // CLIENTES Y VENTAS
+    // ==========================================
     public static Customer findOrCreateCustomer(String customerName, ArrayList<Customer> customers) {
         Customer customer = null;
 
         for (Customer existing : customers) {
             if (existing != null
                     && existing.getName() != null
-                    && existing.getName().equalsIgnoreCase(name)) {
+                    && existing.getName().equalsIgnoreCase(customerName)) {
 
                 customer = existing;
                 break;
@@ -185,7 +217,7 @@ public class Operations {
         }
 
         if (customer == null) {
-            customer = new Customer(name);
+            customer = new Customer(customerName);
             customers.add(customer);
         }
 
@@ -246,108 +278,94 @@ public class Operations {
         return true;
     }
 
-    
-public static boolean registerPayment(
+    public static boolean registerPayment(
         Sale sale,
         String paymentMethodName,
         float amountPaid,
         ArrayList<Sale> sales) {
 
-    if (sale == null || sales == null
-            || paymentMethodName == null
-            || paymentMethodName.isBlank()
-            || amountPaid < 0) {
-        return false;
-    }
-
-    if (sale.getDetails() == null || sale.getDetails().isEmpty()) {
-        return false;
-    }
-
-    float total = sale.computeTotal();
-
-    if (total <= 0 || amountPaid < total) {
-        return false;
-    }
-
-    // Validar todas las cantidades antes de modificar el stock.
-    if (!hasEnoughStock(sale)) {
-        return false;
-    }
-
-    PaymentMethod paymentMethod =
-            new PaymentMethod(paymentMethodName);
-
-    Payment payment = new Payment(amountPaid, paymentMethod);
-
-    if (!payment.validatePayment(total)) {
-        return false;
-    }
-
-    // Descontar el stock solamente después de validar el pago.
-    for (SaleDetail detail : sale.getDetails()) {
-        if (detail.getBook() != null) {
-            Book book = detail.getBook();
-            book.setStock(
-                    book.getStock() - detail.getQuantityProduct()
-            );
-        } else if (detail.getJournal() != null) {
-            Journal journal = detail.getJournal();
-            journal.setStock(
-                    journal.getStock() - detail.getQuantityProduct()
-            );
-        }
-    }
-
-    sale.setPayment(payment);
-    sales.add(sale);
-
-    return true;
-}
-
-private static boolean hasEnoughStock(Sale sale) {
-
-    Map<Book, Integer> bookQuantities = new IdentityHashMap<>();
-    Map<Journal, Integer> journalQuantities = new IdentityHashMap<>();
-
-    for (SaleDetail detail : sale.getDetails()) {
-
-        if (detail == null || detail.getQuantityProduct() <= 0) {
+        if (sale == null || sales == null
+                || paymentMethodName == null
+                || paymentMethodName.isBlank()
+                || amountPaid < 0) {
             return false;
         }
 
-        if (detail.getBook() != null) {
-            Book book = detail.getBook();
-
-            int accumulated = bookQuantities.getOrDefault(book, 0);
-            accumulated += detail.getQuantityProduct();
-
-            if (accumulated > book.getStock()) {
-                return false;
-            }
-
-            bookQuantities.put(book, accumulated);
-
-        } else if (detail.getJournal() != null) {
-            Journal journal = detail.getJournal();
-
-            int accumulated = journalQuantities.getOrDefault(journal, 0);
-            accumulated += detail.getQuantityProduct();
-
-            if (accumulated > journal.getStock()) {
-                return false;
-            }
-
-            journalQuantities.put(journal, accumulated);
-
-        } else {
+        if (sale.getDetails() == null || sale.getDetails().isEmpty()) {
             return false;
         }
+
+        float total = sale.computeTotal();
+
+        if (total <= 0 || amountPaid < total) {
+            return false;
+        }
+
+        if (!hasEnoughStock(sale)) {
+            return false;
+        }
+
+        PaymentMethod paymentMethod = new PaymentMethod(paymentMethodName);
+        Payment payment = new Payment(amountPaid, paymentMethod);
+
+        if (!payment.validatePayment(total)) {
+            return false;
+        }
+
+        for (SaleDetail detail : sale.getDetails()) {
+            if (detail.getBook() != null) {
+                Book book = detail.getBook();
+                book.setStock(
+                        book.getStock() - detail.getQuantityProduct()
+                );
+            } else if (detail.getJournal() != null) {
+                Journal journal = detail.getJournal();
+                journal.setStock(
+                        journal.getStock() - detail.getQuantityProduct()
+                );
+            }
+        }
+
+        sale.setPayment(payment);
+        sales.add(sale);
+
+        return true;
     }
 
-    return true;
-}
+    private static boolean hasEnoughStock(Sale sale) {
+        Map<Book, Integer> bookQuantities = new IdentityHashMap<>();
+        Map<Journal, Integer> journalQuantities = new IdentityHashMap<>();
 
+        for (SaleDetail detail : sale.getDetails()) {
+            if (detail == null || detail.getQuantityProduct() <= 0) {
+                return false;
+            }
+
+            if (detail.getBook() != null) {
+                Book book = detail.getBook();
+                int accumulated = bookQuantities.getOrDefault(book, 0);
+                accumulated += detail.getQuantityProduct();
+
+                if (accumulated > book.getStock()) {
+                    return false;
+                }
+                bookQuantities.put(book, accumulated);
+
+            } else if (detail.getJournal() != null) {
+                Journal journal = detail.getJournal();
+                int accumulated = journalQuantities.getOrDefault(journal, 0);
+                accumulated += detail.getQuantityProduct();
+
+                if (accumulated > journal.getStock()) {
+                    return false;
+                }
+                journalQuantities.put(journal, accumulated);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static float totalSalesByPeriod(
             LocalDate start,
@@ -374,8 +392,10 @@ private static boolean hasEnoughStock(Sale sale) {
         return totalSales;
     }
 
+    // ==========================================
+    // COMPRAS A PROVEEDORES
+    // ==========================================
     public static Purchase createPurchase(String supplierName) {
-
         if (supplierName == null || supplierName.isBlank()) {
             supplierName = "Proveedor no identificado";
         }
@@ -384,6 +404,18 @@ private static boolean hasEnoughStock(Sale sale) {
                 LocalDate.now(),
                 new Supplier(supplierName.trim())
         );
+    }
+
+    private static void validatePurchaseDetail(Purchase purchase, int quantity, float price) {
+        if (purchase == null) {
+            throw new IllegalArgumentException("La compra no puede ser null.");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor a cero.");
+        }
+        if (price < 0) {
+            throw new IllegalArgumentException("El precio de compra no puede ser negativo.");
+        }
     }
 
     public static void addBookToPurchase(
@@ -426,4 +458,3 @@ private static boolean hasEnoughStock(Sale sale) {
         purchases.add(purchase);
     }
 }
-

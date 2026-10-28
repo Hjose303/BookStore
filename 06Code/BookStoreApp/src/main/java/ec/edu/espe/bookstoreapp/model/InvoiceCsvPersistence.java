@@ -1,4 +1,3 @@
-
 package ec.edu.espe.bookstoreapp.model;
 
 import java.io.BufferedWriter;
@@ -55,8 +54,12 @@ public class InvoiceCsvPersistence {
                 StandardOpenOption.CREATE_NEW,
                 StandardOpenOption.WRITE)) {
 
-            // BOM para mejorar la compatibilidad con Excel.
+            // BOM para mejorar la compatibilidad con Excel y tildes.
             writer.write('\uFEFF');
+
+            // LÍNEA CLAVE: Le indica a Excel que las columnas usan punto y coma (;)
+            writer.write("sep=;");
+            writer.newLine();
 
             writer.write("LIBRERIA OLIVO CULTURAL");
             writer.newLine();
