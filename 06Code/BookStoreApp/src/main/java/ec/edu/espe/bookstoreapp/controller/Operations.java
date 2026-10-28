@@ -1,10 +1,12 @@
-package ec.edu.espe.controller;
+package ec.edu.espe.bookstoreapp.controller;
 
+import ec.edu.espe.bookstoreapp.exception.InvalidValueException;
+import ec.edu.espe.bookstoreapp.exception.EmptyInventoryException;
 import ec.edu.espe.bookstoreapp.model.Author;
 import ec.edu.espe.bookstoreapp.model.Book;
 import ec.edu.espe.bookstoreapp.model.Customer;
-import ec.edu.espe.bookstoreapp.model.Editorial;
 import ec.edu.espe.bookstoreapp.model.EducationalLevel;
+import ec.edu.espe.bookstoreapp.model.Editorial;
 import ec.edu.espe.bookstoreapp.model.Journal;
 import ec.edu.espe.bookstoreapp.model.LiteraryGenre;
 import ec.edu.espe.bookstoreapp.model.Payment;
@@ -76,7 +78,7 @@ public class Operations {
         inventory.add(new Journal(name, editorial, yearOfPublication, price, 0, state));
     }
     
-    //Clients
+    //Customers
     public static Customer findOrCreateCustomer(String customerName, ArrayList<Customer> customers) {
         Customer customer = null;
         for (Customer c : customers) {
@@ -153,5 +155,43 @@ public class Operations {
 
     public static void registerPurchase(Purchase purchase, ArrayList<Purchase> purchases) {
         purchases.add(purchase);
+    }
+    
+    //Validations
+    /** Acepta solo valores mayores que 0 (rechaza negativos, cero, NaN e infinitos). */
+    public static void requirePositive(double value, String fieldName) throws InvalidValueException {
+        if (!(value > 0) || Double.isInfinite(value)) {
+            throw new InvalidValueException(fieldName + " debe ser mayor que 0.");
+        }
+    }
+
+    /** Acepta 0 o más (rechaza negativos, NaN e infinitos). */
+    public static void requireNonNegative(double value, String fieldName) throws InvalidValueException {
+        if (!(value >= 0) || Double.isInfinite(value)) {
+            throw new InvalidValueException(fieldName + " no puede ser negativo.");
+        }
+    }
+
+    /** Acepta valores entre min y max, ambos incluidos. */
+    public static void requireInRange(int value, int min, int max, String fieldName)
+            throws InvalidValueException {
+        if (value < min || value > max) {
+            throw new InvalidValueException(fieldName + " debe estar entre " + min + " y " + max + ".");
+        }
+    }
+
+    public static void requireProducts(ArrayList<?> inventory, String productName)
+            throws EmptyInventoryException {
+        if (inventory.isEmpty()) {
+            throw new EmptyInventoryException("No hay " + productName + " en el inventario.");
+        }
+    }
+    
+    public static void requireAnyProduct(ArrayList<Book> books, ArrayList<Journal> journals)
+            throws EmptyInventoryException {
+        if (books.isEmpty() && journals.isEmpty()) {
+            throw new EmptyInventoryException(
+                    "No hay libros ni revistas registrados. Agregue productos antes de registrar una compra.");
+        }
     }
 }
