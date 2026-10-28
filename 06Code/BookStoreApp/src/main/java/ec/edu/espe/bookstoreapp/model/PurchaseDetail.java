@@ -14,11 +14,17 @@ public class PurchaseDetail {
     private Journal journal;
     
     
-    public PurchaseDetail(int stockPurchase, float purchasePrice, Book book, Journal journal) {
+    public PurchaseDetail(int stockPurchase, float purchasePrice, Book book) {
         this.idPurchaseDetail = idCurrent++;
         this.stockPurchase = stockPurchase;
         this.purchasePrice = purchasePrice;
         this.book = book;
+    }
+    
+    public PurchaseDetail(int stockPurchase, float purchasePrice, Journal journal) {
+        this.idPurchaseDetail = idCurrent++;
+        this.stockPurchase = stockPurchase;
+        this.purchasePrice = purchasePrice;
         this.journal = journal;
     }
     

@@ -27,18 +27,14 @@ public class BookStoreApp {
         Scanner input = new Scanner(System.in);
 
         while (controller) {
-            View.showMenu();
-            System.out.print("Seleccione una Accion: ");
+            View.showMenu();            
             
             try {
                 opc = Integer.parseInt(input.nextLine());
                 View.showChoseOption(opc, inventoryBook, inventoryJournal, purchases, customers, sales);
             } catch (NumberFormatException e) {
-                while (controller) {
-                    System.out.println("Ingrese una Opcion Valida");
-                    System.out.println("=========================");
-                    System.out.print("Desea Volver a Intentar Si o No: ");
-                    optionContinue = input.nextLine();
+                while (controller) {                    
+                    optionContinue = View.askRetry();
                     if (optionContinue.equalsIgnoreCase("si")) {
                         controller = false;
                     } else if (optionContinue.equalsIgnoreCase("no")) {

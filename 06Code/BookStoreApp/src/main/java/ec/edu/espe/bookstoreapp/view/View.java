@@ -1,23 +1,14 @@
 package ec.edu.espe.bookstoreapp.view;
 
-import ec.edu.espe.bookstoreapp.model.Author;
+import ec.edu.espe.controller.Operations;
 import ec.edu.espe.bookstoreapp.model.Book;
 import ec.edu.espe.bookstoreapp.model.Customer;
-import ec.edu.espe.bookstoreapp.model.Editorial;
-import ec.edu.espe.bookstoreapp.model.EducationalLevel;
 import ec.edu.espe.bookstoreapp.model.Journal;
-import ec.edu.espe.bookstoreapp.model.LiteraryGenre;
-import ec.edu.espe.bookstoreapp.model.Payment;
-import ec.edu.espe.bookstoreapp.model.PaymentMethod;
 import ec.edu.espe.bookstoreapp.model.Purchase;
-import ec.edu.espe.bookstoreapp.model.PurchaseDetail;
 import ec.edu.espe.bookstoreapp.model.Sale;
-import ec.edu.espe.bookstoreapp.model.SaleDetail;
-import ec.edu.espe.bookstoreapp.model.Supplier;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -25,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class View {
 
-    private static Scanner input = new Scanner(System.in);
+    private static final Scanner input = new Scanner(System.in);
 
     public static void showMenu() {
         System.out.println("""
@@ -45,6 +36,18 @@ public class View {
                            9.Salir
                            =====================================================
                            """);
+    }
+    
+    public static int askMenuOption() {
+        System.out.print("Seleccione una Accion: ");
+        return Integer.parseInt(input.nextLine());
+    }
+    
+    public static String askRetry() {
+        System.out.println("Ingrese una Opcion Valida");
+        System.out.println("=========================");
+        System.out.print("Desea Volver a Intentar Si o No: ");
+        return input.nextLine();
     }
 
     public static void showChoseOption(int opc, ArrayList<Book> books,
@@ -108,51 +111,36 @@ public class View {
         System.out.println("==============================");
 
         // 1. Datos del Cliente
-        Customer customer = findOrCreateCustomer(customers);
+        Customer customer = askCustomer(customers);
 
         // 2. Método de Pago
-        PaymentMethod paymentMethod = askPaymentMethod();
+        String paymentMethodName = askPaymentMethodName();
 
         // 3. Crear Venta temporal
-        Sale sale = createSale(customer);
+        Sale sale = Operations.createSale(customer,askSaleType());
 
         // 4. Agregar Productos a la Venta
         addProductsToSale(sale, inventoryBooks, inventoryJournals);
 
         // 5. Procesar Pago
-        processPayment(sale, paymentMethod, sales);
+        processPayment(sale, paymentMethodName, sales);
     }
 
-    private static Customer findOrCreateCustomer(ArrayList<Customer> customers) {
+    private static Customer askCustomer(ArrayList<Customer> customers) {
         System.out.print("Ingrese el Nombre del Cliente: ");
-        String customerName = input.nextLine();
-
-        Customer customer = null;
-        for (Customer c : customers) {
-            if (c.getName().equalsIgnoreCase(customerName)) {
-                customer = c;
-                break;
-            }
-        }
-        if (customer == null) {
-            customer = new Customer(customerName);
-            customers.add(customer);
-        }
-        customer.addVisit(LocalDate.now());
-        return customer;
+        String customerName = input.nextLine();       
+        return Operations.findOrCreateCustomer(customerName, customers);
     }
 
-    private static PaymentMethod askPaymentMethod() {
-        System.out.print("Ingrese el Método de Pago (Efectivo/Tarjeta/Transferencia): ");
-        String paymentMethodName = input.nextLine();
-        return new PaymentMethod(paymentMethodName);
+    private static String askPaymentMethodName() {
+        System.out.print("Ingrese el Método de Pago (Efectivo/Tarjeta/Transferencia): ");        
+        return input.nextLine();
     }
-
-    private static Sale createSale(Customer customer) {
+    
+    private static String askSaleType() {
         System.out.print("Ingrese el Tipo de Venta (Factura/Nota de Venta): ");
-        String typeSale = input.nextLine();
-        return new Sale(LocalDate.now(), customer, typeSale);
-    }
+        return input.nextLine();
+    }                    
 
     private static void addProductsToSale(Sale sale, ArrayList<Book> inventoryBooks,
             ArrayList<Journal> inventoryJournals) {
@@ -196,9 +184,7 @@ public class View {
             System.out.print("Ingrese la cantidad a vender: ");
             int qty = Integer.parseInt(input.nextLine());
 
-            SaleDetail detail = new SaleDetail(selectedBook, qty);
-            if (detail.validateProduct()) {
-                sale.addDetail(detail);
+            if (Operations.addBookToSale(sale, selectedBook, qty)) {
                 System.out.println("¡Libro agregado a la venta!");
             } else {
                 System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
@@ -224,9 +210,7 @@ public class View {
             System.out.print("Ingrese la cantidad a vender: ");
             int qty = Integer.parseInt(input.nextLine());
 
-            SaleDetail detail = new SaleDetail(selectedJournal, qty);
-            if (detail.validateProduct()) {
-                sale.addDetail(detail);
+            if (Operations.addJournalToSale(sale, selectedJournal, qty)) {                
                 System.out.println("¡Revista agregada a la venta!");
             } else {
                 System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
@@ -234,16 +218,13 @@ public class View {
         }
     }
 
-    private static void processPayment(Sale sale, PaymentMethod paymentMethod, ArrayList<Sale> sales) {
+    private static void processPayment(Sale sale, String paymentMethodName, ArrayList<Sale> sales) {
         float totalSale = sale.computeTotal();
         System.out.println("\nTotal de la venta: $" + totalSale);
         System.out.print("Ingrese el monto abonado por el cliente $: ");
         float amountPaid = Float.parseFloat(input.nextLine());
 
-        Payment payment = new Payment(amountPaid, paymentMethod);
-        if (payment.validatePayment(totalSale)) {
-            sale.setPayment(payment);
-            sales.add(sale);
+        if (Operations.registerPayment(sale, paymentMethodName, amountPaid, sales)) {
             float cambio = amountPaid - totalSale;
             System.out.println("==========================================");
             System.out.println("¡Venta procesada con éxito!");
@@ -295,8 +276,7 @@ public class View {
         String eduLevel;
         String Genre;
         float price;
-        ArrayList<Author> authors = new ArrayList<>();
-        Editorial editorial;
+        ArrayList<String> authorNames = new ArrayList<>();        
 
         System.out.println("Agregar Libros: ");
         System.out.println("========================================");
@@ -305,25 +285,21 @@ public class View {
         do {
             System.out.print("Ingrese el Nombre del Autor: ");
             authorName = input.nextLine();
-            authors.add(new Author(authorName));
+            authorNames.add(authorName);
             System.out.print("¿Desea agregar otro autor para este libro? (s/n): ");
             option = input.nextLine();
         } while (option.equalsIgnoreCase("s"));
         System.out.print("Ingrese el Nombre de la Editorial: ");
-        editorialName = input.nextLine();
-        editorial = new Editorial(editorialName);
+        editorialName = input.nextLine();        
         System.out.print("Ingrese el Precio $: ");
         price = Float.parseFloat(input.nextLine());
         System.out.print("Ingrese el Estado del Libro: ");
         state = input.nextLine();
         System.out.println("Ingrese el Genero Literario: ");
-        Genre = input.nextLine();
-        LiteraryGenre literaryGenre = new LiteraryGenre(Genre);
+        Genre = input.nextLine();        
         System.out.print("Ingrese el Nivel Educativo del Libro: ");
-        eduLevel = input.nextLine();
-        EducationalLevel educationalLevel = new EducationalLevel(eduLevel);
-        Book newBook = new Book(title, authors, editorial, price, 0, state, literaryGenre, educationalLevel);
-        inventory.add(newBook);
+        eduLevel = input.nextLine();        
+        Operations.addBook(inventory, title, authorNames, editorialName, price, state, Genre, eduLevel);        
         System.out.println("========================================");
         System.out.println("¡Libro agregado exitosamente al inventario!");
     }
@@ -336,8 +312,7 @@ public class View {
         String name = input.nextLine();
 
         System.out.print("Nombre de la editorial: ");
-        String editorialName = input.nextLine();
-        Editorial editorial = new Editorial(editorialName);
+        String editorialName = input.nextLine();        
 
         System.out.print("Anio de publicacion: ");
         int year = Integer.parseInt(input.nextLine());
@@ -349,8 +324,7 @@ public class View {
         System.out.print("Estado: ");
         String state = input.nextLine();
 
-        Journal journal = new Journal(name, editorial, yearOfPublication, price, 0, state);
-        inventory.add(journal);
+        Operations.addJournal(inventory, name, editorialName, yearOfPublication, price, state);        
         System.out.println("========================================");
         System.out.println("¡Revista agregada exitosamente al inventario!");
     }
@@ -362,52 +336,61 @@ public class View {
 
         System.out.print("Nombre del proveedor: ");
         String supplierName = input.nextLine();
-        Supplier supplier = new Supplier(supplierName);
-
-        Purchase purchase = new Purchase(LocalDate.now(), supplier);
+        Purchase purchase = Operations.createPurchase(supplierName);        
 
         String again = "s";
         while (again.equalsIgnoreCase("s")) {
             System.out.println("1.Comprar Libro");
             System.out.println("2.Comprar Revista");
             System.out.print("Ingrese una Opcion: ");
-            int type = Integer.parseInt(input.nextLine());
-
-            Book book = null;
-            Journal journal = null;
+            int type = Integer.parseInt(input.nextLine());          
 
             if (type == 1) {
-                for (int i = 0; i < books.size(); i++) {
-                    System.out.println(i + ". " + books.get(i).getTitle());
-                }
-                System.out.print("Numero del libro: ");
-                int pos = Integer.parseInt(input.nextLine());
-                book = books.get(pos);
+                addBookToPurchase(purchase, books);
             } else {
-                for (int i = 0; i < journals.size(); i++) {
-                    System.out.println(i + ". " + journals.get(i).getNameJournal());
-                }
-                System.out.print("Numero de la revista: ");
-                int pos = Integer.parseInt(input.nextLine());
-                journal = journals.get(pos);
+                addJournalToPurchase(purchase, journals);
             }
-
-            System.out.print("Cantidad: ");
-            int quantity = Integer.parseInt(input.nextLine());
-
-            System.out.print("Precio de compra: ");
-            float price = Float.parseFloat(input.nextLine());
-
-            PurchaseDetail detail = new PurchaseDetail(quantity, price, book, journal);
-            purchase.addDetailPurchase(detail);
-
             System.out.print("¿Desea agregar otro producto? (s/n): ");
             again = input.nextLine();
         }
 
-        purchases.add(purchase);
+        Operations.registerPurchase(purchase, purchases);
         System.out.println("========================================");
         System.out.println("Compra registrada. Total: " + purchase.getTotalPurchase());
+    }
+    
+    private static void addBookToPurchase(Purchase purchase, ArrayList<Book> books){
+        for (int i = 0; i < books.size(); i++){
+            System.out.println(i + "." + books.get(i).getTitle());
+        }
+        System.out.println("Numero del libro: ");
+        int pos = Integer.parseInt(input.nextLine());
+        Book book = books.get(pos);
+
+        System.out.print("Cantidad: ");
+        int quantity = Integer.parseInt(input.nextLine());
+
+        System.out.print("Precio de compra: ");
+        float price = Float.parseFloat(input.nextLine());
+        
+        Operations.addBookToPurchase(purchase, book, quantity, price);
+    }  
+    
+    private static void addJournalToPurchase(Purchase purchase, ArrayList<Journal> journals) {
+        for (int i = 0; i < journals.size(); i++) {
+            System.out.println(i + ". " + journals.get(i).getNameJournal());
+        }
+        System.out.print("Numero de la revista: ");
+        int pos = Integer.parseInt(input.nextLine());
+        Journal journal = journals.get(pos);
+
+        System.out.print("Cantidad: ");
+        int quantity = Integer.parseInt(input.nextLine());
+
+        System.out.print("Precio de compra: ");
+        float price = Float.parseFloat(input.nextLine());
+
+        Operations.addJournalToPurchase(purchase, journal, quantity, price);
     }
 
     public static void searchBooks(ArrayList<Book> inventory) {
@@ -424,7 +407,7 @@ public class View {
             case 1 -> {
                 System.out.print("Ingrese el Titulo del Libro: ");
                 String title = input.nextLine();
-                ArrayList<Book> results = searchBookByTitle(title, inventory);
+                ArrayList<Book> results = Operations.searchBookByTitle(title, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 for (Book b : results) {
@@ -434,7 +417,7 @@ public class View {
             case 2 -> {
                 System.out.print("Ingrese El Nombre del Autor: ");
                 String nameAuthor = input.nextLine();
-                ArrayList<Book> results = searchBookByAuthor(nameAuthor, inventory);
+                ArrayList<Book> results = Operations.searchBookByAuthor(nameAuthor, inventory);
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 for (Book b : results) {
@@ -444,29 +427,7 @@ public class View {
             default ->
                 throw new AssertionError();
         }
-    }
-
-    public static ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getTitle() != null
-                    && b.getTitle().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
-
-    public static ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getAuthors() != null
-                    && b.getAuthors().stream().anyMatch(a -> a.getName().equalsIgnoreCase(authorName)))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
+    }    
 
     public static void searchJournals(ArrayList<Journal> inventory) {
         System.out.flush();
@@ -474,22 +435,11 @@ public class View {
         System.out.println("Buscar Revistas: ");
         System.out.print("Ingrese el Nombre de la Revista: ");
         String nameJournal = input.nextLine();
-        ArrayList<Journal> results = searchJournalByTitle(nameJournal, inventory);
+        ArrayList<Journal> results = Operations.searchJournalByTitle(nameJournal, inventory);
         for (Journal journal : results) {
             System.out.println(journal);
         }
-    }
-
-    public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
-        ArrayList<Journal> results = new ArrayList<>();
-        if (allJournal != null) {
-            results = allJournal.stream()
-                    .filter(j -> j.getNameJournal() != null
-                    && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return results;
-    }
+    }    
 
     public static void checkEconomicStatus(ArrayList<Purchase> purchases, ArrayList<Sale> sales) {
         System.out.flush();
@@ -503,12 +453,7 @@ public class View {
         LocalDate end = LocalDate.parse(input.nextLine());
 
         float totalPurchases = Purchase.getTotalPurchasesByPeriod(start, end, purchases);
-        float totalSales = 0;
-        for (Sale s : sales) {
-            if (s.getDate() != null && !s.getDate().isBefore(start) && !s.getDate().isAfter(end)) {
-                totalSales += s.computeTotal();
-            }
-        }
+        float totalSales = Operations.totalSalesByPeriod(start, end, sales);
 
         System.out.println("Total Ingresos por Ventas: $" + totalSales);
         System.out.println("Total Gastos por Compras:  $" + totalPurchases);
