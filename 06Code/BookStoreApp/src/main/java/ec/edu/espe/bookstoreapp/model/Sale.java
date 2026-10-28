@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * @author Dennis Noboa, 404 Founders, @ESPE
  */
 public class Sale {
+
     private static int idCurrent;
     private int idSale;
     private LocalDate date;
@@ -20,23 +21,14 @@ public class Sale {
         this.idSale = idCurrent++;
         this.date = date;
         this.customer = customer;
-        this.typeSale = typeSale;        
+        this.typeSale = typeSale;
         this.details = new ArrayList<>();
     }
 
     public void addDetail(SaleDetail detail) {
-        if (detail != null && detail.validateProduct()) {
+        if (detail != null && detail.validateProduct()
+                && detail.getQuantityProduct() > 0) {
             details.add(detail);
-            
-            // Descontar del stock al realizar la venta
-            if (detail.getBook() != null) {
-                Book b = detail.getBook();
-                b.setStock(b.getStock() - detail.getQuantityProduct());
-            }
-            if (detail.getJournal() != null) {
-                Journal j = detail.getJournal();
-                j.setStock(j.getStock() - detail.getQuantityProduct());
-            }
         }
     }
 
@@ -49,8 +41,8 @@ public class Sale {
     }
 
     public float calculateProfit(String periodType) {
-        // Lógica para estimar ganancia según período
-        return computeTotal() * 0.30f; // Ejemplo: 30% de margen de ganancia
+
+        return computeTotal() * 0.30f;
     }
 
     public String generateSalesReport(LocalDate startDate, LocalDate endDate) {
@@ -62,7 +54,7 @@ public class Sale {
         report.append("Total: $").append(computeTotal()).append("\n");
         return report.toString();
     }
-    
+
     /**
      * @return the idCurrent
      */
@@ -165,5 +157,5 @@ public class Sale {
     public String toString() {
         return "Sale{" + "idSale=" + idSale + ", date=" + date + ", customer=" + customer + ", typeSale=" + typeSale + ", payment=" + payment + ", details=" + details + '}';
     }
-    
+
 }

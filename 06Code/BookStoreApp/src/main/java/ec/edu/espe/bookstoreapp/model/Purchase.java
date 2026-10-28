@@ -8,39 +8,35 @@ import java.util.ArrayList;
  * @author Julian Olalla, 404 Founders, @ESPE
  */
 public class Purchase {
+
     private static int idCurrent;
     private int idPurchase;
     private LocalDate date;
     private float totalPurchase;
-    
+
     private Supplier supplier;
     private ArrayList<PurchaseDetail> details;
 
     public Purchase(LocalDate date, Supplier supplier) {
         this.idPurchase = idCurrent++;
-        this.date = date;        
+        this.date = date;
         this.supplier = supplier;
         this.details = new ArrayList<>();
         this.totalPurchase = 0;
     }
-    
+
     public void addDetailPurchase(PurchaseDetail detail) {
-        if (detail != null && detail.getStockPurchase() > 0) {
+        if (detail != null
+                && detail.getStockPurchase() > 0
+                && detail.getPurchasePrice() >= 0
+                && (detail.getBook() != null
+                || detail.getJournal() != null)) {
+
             details.add(detail);
-            
-            Book book = detail.getBook();
-            if (book != null){
-                book.setStock(book.getStock() + detail.getStockPurchase());
-            }
-            
-            Journal journal = detail.getJournal();
-            if (journal != null){
-                journal.setStock(journal.getStock() + detail.getStockPurchase());
-            }
             computeTotalPurchase();
         }
     }
-    
+
     public float computeTotalPurchase() {
         float total = 0;
         for (PurchaseDetail detail : getDetails()) {
@@ -49,7 +45,7 @@ public class Purchase {
         this.totalPurchase = total;
         return total;
     }
-    
+
     public static float getTotalPurchasesByPeriod(LocalDate startDate, LocalDate endDate,
             ArrayList<Purchase> allPurchases) {
         float total = 0;
@@ -68,14 +64,12 @@ public class Purchase {
 
     @Override
     public String toString() {
-        return "Purchase{" + "idPurchase=" + getIdPurchase() 
-                + ", date=" + getDate() 
-                + ", totalPurchase=" + getTotalPurchase() 
-                + ", supplier=" + getSupplier() 
+        return "Purchase{" + "idPurchase=" + getIdPurchase()
+                + ", date=" + getDate()
+                + ", totalPurchase=" + getTotalPurchase()
+                + ", supplier=" + getSupplier()
                 + ", details=" + getDetails() + '}';
     }
-    
-
 
     /**
      * @return the idPurchase
@@ -145,6 +139,6 @@ public class Purchase {
      */
     public void setDetails(ArrayList<PurchaseDetail> details) {
         this.details = details;
-    }                
-    
+    }
+
 }

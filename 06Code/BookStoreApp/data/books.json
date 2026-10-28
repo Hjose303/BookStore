@@ -1,0 +1,56 @@
+[
+  {
+    "idBook": 0,
+    "title": "Calculo Vectorial",
+    "authors": [
+      {
+        "idAuthor": 0,
+        "name": "Jerrorld E. Marsen"
+      },
+      {
+        "idAuthor": 1,
+        "name": "Anthony J. Tromba"
+      }
+    ],
+    "editorial": {
+      "idEditorial": 0,
+      "nameEditorial": "NAN"
+    },
+    "price": 10.0,
+    "stock": 7,
+    "state": "Usado",
+    "literaryGenre": {
+      "idLiteraryGenre": 0,
+      "LiteraryGenre": "Matematicas"
+    },
+    "educationalLevel": {
+      "idLevel": 0,
+      "nameEducationalLevel": "Universitario"
+    }
+  },
+  {
+    "idBook": 0,
+    "title": "Geometria Analitica",
+    "authors": [
+      {
+        "idAuthor": 0,
+        "name": "Joseph H. Kindle"
+      }
+    ],
+    "editorial": {
+      "idEditorial": 0,
+      "nameEditorial": "Schaum"
+    },
+    "price": 15.0,
+    "stock": 12,
+    "state": "Usado",
+    "literaryGenre": {
+      "idLiteraryGenre": 0,
+      "LiteraryGenre": "Matematicas"
+    },
+    "educationalLevel": {
+      "idLevel": 0,
+      "nameEducationalLevel": "Colegial"
+    }
+  }
+]

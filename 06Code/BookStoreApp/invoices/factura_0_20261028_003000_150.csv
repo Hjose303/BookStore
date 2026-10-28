@@ -1,0 +1,14 @@
+﻿LIBRERIA OLIVO CULTURAL
+Numero de venta;0
+Fecha;2026-10-28
+Cliente;"Final"
+Tipo de venta;"Nota de Venta"
+Metodo de pago;"Efectivo"
+
+Tipo de producto;Codigo;Producto;Cantidad;Precio unitario;Subtotal
+"Libro";"0";"Calculo Vectorial";3;10.00;30.00
+"Libro";"0";"Geometria Analitica";3;15.00;45.00
+
+TOTAL DE LA VENTA;;;;;75.00
+Monto recibido;80.00
+Cambio;5.00

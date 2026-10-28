@@ -1,4 +1,4 @@
-package ec.edu.espe.bookstoreapp.controller;
+package ec.edu.espe.controller;
 
 import ec.edu.espe.bookstoreapp.exception.InvalidValueException;
 import ec.edu.espe.bookstoreapp.exception.EmptyInventoryException;
@@ -16,182 +16,414 @@ import ec.edu.espe.bookstoreapp.model.PurchaseDetail;
 import ec.edu.espe.bookstoreapp.model.Sale;
 import ec.edu.espe.bookstoreapp.model.SaleDetail;
 import ec.edu.espe.bookstoreapp.model.Supplier;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 /**
  *
  * @author Julian Olalla, 404 Founders, @ESPE
  */
 public class Operations {
-    //Searchings
-    public static ArrayList<Book> searchBookByTitle(String titleQuery, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getTitle() != null
-                    && b.getTitle().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
+
+    public static ArrayList<Book> searchBookByTitle(
+            String titleQuery, ArrayList<Book> allBooks) {
+
+        if (allBooks == null || titleQuery == null) {
+            return new ArrayList<>();
         }
-        return results;
+        return allBooks.stream()
+                .filter(book -> book != null
+                        && book.getTitle() != null
+                        && book.getTitle().toLowerCase()
+                                .contains(titleQuery.toLowerCase()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<Book> searchBookByAuthor(String authorName, ArrayList<Book> allBooks) {
-        ArrayList<Book> results = new ArrayList<>();
-        if (allBooks != null) {
-            results = allBooks.stream()
-                    .filter(b -> b.getAuthors() != null
-                    && b.getAuthors().stream().anyMatch(a -> a.getName().equalsIgnoreCase(authorName)))
-                    .collect(Collectors.toCollection(ArrayList::new));
+    public static ArrayList<Book> searchBookByAuthor(
+            String authorName, ArrayList<Book> allBooks) {
+
+        if (allBooks == null || authorName == null) {
+            return new ArrayList<>();
         }
-        return results;
+
+        return allBooks.stream()
+                .filter(book -> book != null
+                        && book.getAuthors() != null
+                        && book.getAuthors().stream()
+                                .anyMatch(author -> author != null
+                                        && author.getName() != null
+                                        && author.getName().equalsIgnoreCase(
+                                                authorName)))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<Journal> searchJournalByTitle(String titleQuery, ArrayList<Journal> allJournal) {
-        ArrayList<Journal> results = new ArrayList<>();
-        if (allJournal != null) {
-            results = allJournal.stream()
-                    .filter(j -> j.getNameJournal() != null
-                    && j.getNameJournal().toLowerCase().contains(titleQuery.toLowerCase()))
-                    .collect(Collectors.toCollection(ArrayList::new));
+    public static ArrayList<Journal> searchJournalByTitle(
+            String titleQuery, ArrayList<Journal> allJournals) {
+
+        if (allJournals == null || titleQuery == null) {
+            return new ArrayList<>();
         }
-        return results;
+
+        return allJournals.stream()
+                .filter(journal -> journal != null
+                        && journal.getNameJournal() != null
+                        && journal.getNameJournal().toLowerCase()
+                                .contains(titleQuery.toLowerCase()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
-    
-    //Inventory
-    public static void addBook(ArrayList<Book> inventory, String title, ArrayList<String> authorNames,
-            String editorialName, float price, String state, String genreName, String eduLevelName) {
+
+    public static void addBook(
+            ArrayList<Book> inventory,
+            String title,
+            ArrayList<String> authorNames,
+            String editorialName,
+            float price,
+            int initialStock,
+            String state,
+            String genreName,
+            String eduLevelName) {
+
+        if (inventory == null) {
+            throw new IllegalArgumentException(
+                    "El inventario de libros no puede ser null.");
+        }
+
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El titulo del libro es obligatorio.");
+        }
+
+        if (authorNames == null || authorNames.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "El libro debe tener al menos un autor.");
+        }
+
+        if (price < 0 || initialStock < 0) {
+            throw new IllegalArgumentException(
+                    "El precio y el stock inicial no pueden ser negativos.");
+        }
+
         ArrayList<Author> authors = new ArrayList<>();
+
         for (String authorName : authorNames) {
-            authors.add(new Author(authorName));
+            if (authorName != null && !authorName.isBlank()) {
+                authors.add(new Author(authorName.trim()));
+            }
         }
+
+        if (authors.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Debe ingresar al menos un autor valido.");
+        }
+
         Editorial editorial = new Editorial(editorialName);
         LiteraryGenre literaryGenre = new LiteraryGenre(genreName);
-        EducationalLevel educationalLevel = new EducationalLevel(eduLevelName);
-        inventory.add(new Book(title, authors, editorial, price, 0, state, literaryGenre, educationalLevel));
+        EducationalLevel educationalLevel =
+                new EducationalLevel(eduLevelName);
+
+        Book book = new Book(
+                title.trim(),
+                authors,
+                editorial,
+                price,
+                initialStock,
+                state,
+                literaryGenre,
+                educationalLevel
+        );
+
+        inventory.add(book);
     }
 
-    public static void addJournal(ArrayList<Journal> inventory, String name, String editorialName,
-            LocalDate yearOfPublication, float price, String state) {
+    public static void addJournal(
+            ArrayList<Journal> inventory,
+            String name,
+            String editorialName,
+            LocalDate yearOfPublication,
+            float price,
+            int initialStock,
+            String state) {
+
+        if (inventory == null) {
+            throw new IllegalArgumentException(
+                    "El inventario de revistas no puede ser null.");
+        }
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El nombre de la revista es obligatorio.");
+        }
+
+        if (price < 0 || initialStock < 0) {
+            throw new IllegalArgumentException(
+                    "El precio y el stock inicial no pueden ser negativos.");
+        }
+
+        if (yearOfPublication == null) {
+            throw new IllegalArgumentException(
+                    "El anio de publicacion es obligatorio.");
+        }
+
         Editorial editorial = new Editorial(editorialName);
         inventory.add(new Journal(name, editorial, yearOfPublication, price, 0, state));
     }
     
-    //Customers
+    //Clients
     public static Customer findOrCreateCustomer(String customerName, ArrayList<Customer> customers) {
         Customer customer = null;
-        for (Customer c : customers) {
-            if (c.getName().equalsIgnoreCase(customerName)) {
-                customer = c;
+
+        for (Customer existing : customers) {
+            if (existing != null
+                    && existing.getName() != null
+                    && existing.getName().equalsIgnoreCase(name)) {
+
+                customer = existing;
                 break;
             }
         }
+
         if (customer == null) {
-            customer = new Customer(customerName);
+            customer = new Customer(name);
             customers.add(customer);
         }
+
         customer.addVisit(LocalDate.now());
+
         return customer;
     }
-    
-    //Sales
+
     public static Sale createSale(Customer customer, String typeSale) {
         return new Sale(LocalDate.now(), customer, typeSale);
     }
-    
-    /** @return true si el libro se agregó a la venta; false si el stock no alcanza. */
-    public static boolean addBookToSale(Sale sale, Book book, int quantity) {
-        return addDetailToSale(sale, new SaleDetail(book, quantity));
+
+    public static boolean addBookToSale(
+            Sale sale, Book book, int quantity) {
+
+        if (sale == null || book == null || quantity <= 0) {
+            return false;
+        }
+
+        if (book.getStock() < quantity) {
+            return false;
+        }
+
+        SaleDetail detail = new SaleDetail(book, quantity);
+
+        return addDetailToSale(sale, detail);
     }
 
-    /** @return true si la revista se agregó a la venta; false si el stock no alcanza. */
-    public static boolean addJournalToSale(Sale sale, Journal journal, int quantity) {
-        return addDetailToSale(sale, new SaleDetail(journal, quantity));
+    public static boolean addJournalToSale(
+            Sale sale, Journal journal, int quantity) {
+
+        if (sale == null || journal == null || quantity <= 0) {
+            return false;
+        }
+
+        if (journal.getStock() < quantity) {
+            return false;
+        }
+
+        SaleDetail detail = new SaleDetail(journal, quantity);
+
+        return addDetailToSale(sale, detail);
     }
-    
-    private static boolean addDetailToSale(Sale sale, SaleDetail detail) {
+
+    private static boolean addDetailToSale(
+            Sale sale, SaleDetail detail) {
+
+        if (sale == null || detail == null) {
+            return false;
+        }
+
         if (!detail.validateProduct()) {
             return false;
         }
+
         sale.addDetail(detail);
+
         return true;
     }
+
     
-    public static boolean registerPayment(Sale sale, String paymentMethodName, float amountPaid,
-            ArrayList<Sale> sales) {
-        PaymentMethod paymentMethod = new PaymentMethod(paymentMethodName);
-        Payment payment = new Payment(amountPaid, paymentMethod);
-        if (!payment.validatePayment(sale.computeTotal())) {
+public static boolean registerPayment(
+        Sale sale,
+        String paymentMethodName,
+        float amountPaid,
+        ArrayList<Sale> sales) {
+
+    if (sale == null || sales == null
+            || paymentMethodName == null
+            || paymentMethodName.isBlank()
+            || amountPaid < 0) {
+        return false;
+    }
+
+    if (sale.getDetails() == null || sale.getDetails().isEmpty()) {
+        return false;
+    }
+
+    float total = sale.computeTotal();
+
+    if (total <= 0 || amountPaid < total) {
+        return false;
+    }
+
+    // Validar todas las cantidades antes de modificar el stock.
+    if (!hasEnoughStock(sale)) {
+        return false;
+    }
+
+    PaymentMethod paymentMethod =
+            new PaymentMethod(paymentMethodName);
+
+    Payment payment = new Payment(amountPaid, paymentMethod);
+
+    if (!payment.validatePayment(total)) {
+        return false;
+    }
+
+    // Descontar el stock solamente después de validar el pago.
+    for (SaleDetail detail : sale.getDetails()) {
+        if (detail.getBook() != null) {
+            Book book = detail.getBook();
+            book.setStock(
+                    book.getStock() - detail.getQuantityProduct()
+            );
+        } else if (detail.getJournal() != null) {
+            Journal journal = detail.getJournal();
+            journal.setStock(
+                    journal.getStock() - detail.getQuantityProduct()
+            );
+        }
+    }
+
+    sale.setPayment(payment);
+    sales.add(sale);
+
+    return true;
+}
+
+private static boolean hasEnoughStock(Sale sale) {
+
+    Map<Book, Integer> bookQuantities = new IdentityHashMap<>();
+    Map<Journal, Integer> journalQuantities = new IdentityHashMap<>();
+
+    for (SaleDetail detail : sale.getDetails()) {
+
+        if (detail == null || detail.getQuantityProduct() <= 0) {
             return false;
         }
-        sale.setPayment(payment);
-        sales.add(sale);
-        return true;
+
+        if (detail.getBook() != null) {
+            Book book = detail.getBook();
+
+            int accumulated = bookQuantities.getOrDefault(book, 0);
+            accumulated += detail.getQuantityProduct();
+
+            if (accumulated > book.getStock()) {
+                return false;
+            }
+
+            bookQuantities.put(book, accumulated);
+
+        } else if (detail.getJournal() != null) {
+            Journal journal = detail.getJournal();
+
+            int accumulated = journalQuantities.getOrDefault(journal, 0);
+            accumulated += detail.getQuantityProduct();
+
+            if (accumulated > journal.getStock()) {
+                return false;
+            }
+
+            journalQuantities.put(journal, accumulated);
+
+        } else {
+            return false;
+        }
     }
-    
-    public static float totalSalesByPeriod(LocalDate start, LocalDate end, ArrayList<Sale> sales) {
+
+    return true;
+}
+
+
+    public static float totalSalesByPeriod(
+            LocalDate start,
+            LocalDate end,
+            ArrayList<Sale> sales) {
+
+        if (start == null || end == null
+                || sales == null || end.isBefore(start)) {
+            return 0;
+        }
+
         float totalSales = 0;
-        for (Sale s : sales) {
-            if (s.getDate() != null && !s.getDate().isBefore(start) && !s.getDate().isAfter(end)) {
-                totalSales += s.computeTotal();
+
+        for (Sale sale : sales) {
+            if (sale != null
+                    && sale.getDate() != null
+                    && !sale.getDate().isBefore(start)
+                    && !sale.getDate().isAfter(end)) {
+
+                totalSales += sale.computeTotal();
             }
         }
+
         return totalSales;
     }
-    
-    //Purchases
+
     public static Purchase createPurchase(String supplierName) {
-        return new Purchase(LocalDate.now(), new Supplier(supplierName));
+
+        if (supplierName == null || supplierName.isBlank()) {
+            supplierName = "Proveedor no identificado";
+        }
+
+        return new Purchase(
+                LocalDate.now(),
+                new Supplier(supplierName.trim())
+        );
     }
 
-    public static void addBookToPurchase(Purchase purchase, Book book, int quantity, float price) {
-        purchase.addDetailPurchase(new PurchaseDetail(quantity, price, book));
+    public static void addBookToPurchase(
+            Purchase purchase,
+            Book book,
+            int quantity,
+            float price) {
+
+        validatePurchaseDetail(purchase, quantity, price);
+
+        if (book == null) {
+            throw new IllegalArgumentException(
+                    "El libro no puede ser null.");
+        }
+
+        purchase.addDetailPurchase(
+                new PurchaseDetail(quantity, price, book)
+        );
     }
 
-    public static void addJournalToPurchase(Purchase purchase, Journal journal, int quantity, float price) {
-        purchase.addDetailPurchase(new PurchaseDetail(quantity, price, journal));
+    public static void addJournalToPurchase(
+            Purchase purchase,
+            Journal journal,
+            int quantity,
+            float price) {
+
+        validatePurchaseDetail(purchase, quantity, price);
+
+        if (journal == null) {
+            throw new IllegalArgumentException(
+                    "La revista no puede ser null.");
+        }
+
+        purchase.addDetailPurchase(
+                new PurchaseDetail(quantity, price, journal)
+        );
     }
 
     public static void registerPurchase(Purchase purchase, ArrayList<Purchase> purchases) {
         purchases.add(purchase);
     }
-    
-    //Validations
-    /** Acepta solo valores mayores que 0 (rechaza negativos, cero, NaN e infinitos). */
-    public static void requirePositive(double value, String fieldName) throws InvalidValueException {
-        if (!(value > 0) || Double.isInfinite(value)) {
-            throw new InvalidValueException(fieldName + " debe ser mayor que 0.");
-        }
-    }
-
-    /** Acepta 0 o más (rechaza negativos, NaN e infinitos). */
-    public static void requireNonNegative(double value, String fieldName) throws InvalidValueException {
-        if (!(value >= 0) || Double.isInfinite(value)) {
-            throw new InvalidValueException(fieldName + " no puede ser negativo.");
-        }
-    }
-
-    /** Acepta valores entre min y max, ambos incluidos. */
-    public static void requireInRange(int value, int min, int max, String fieldName)
-            throws InvalidValueException {
-        if (value < min || value > max) {
-            throw new InvalidValueException(fieldName + " debe estar entre " + min + " y " + max + ".");
-        }
-    }
-
-    public static void requireProducts(ArrayList<?> inventory, String productName)
-            throws EmptyInventoryException {
-        if (inventory.isEmpty()) {
-            throw new EmptyInventoryException("No hay " + productName + " en el inventario.");
-        }
-    }
-    
-    public static void requireAnyProduct(ArrayList<Book> books, ArrayList<Journal> journals)
-            throws EmptyInventoryException {
-        if (books.isEmpty() && journals.isEmpty()) {
-            throw new EmptyInventoryException(
-                    "No hay libros ni revistas registrados. Agregue productos antes de registrar una compra.");
-        }
-    }
 }
+
