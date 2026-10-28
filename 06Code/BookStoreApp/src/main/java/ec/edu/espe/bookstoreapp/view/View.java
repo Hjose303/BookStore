@@ -45,7 +45,7 @@ public class View {
     }
 
     public static String askRetry() {
-        System.out.print("¿Desea volver a intentar? (si/no): ");
+        System.out.print("Desea volver a intentar? (si/no): ");
         return input.nextLine();
     }
 
@@ -165,7 +165,7 @@ public class View {
 
         for (Book book : inventory) {
             if (book.validateStock()) {
-                System.out.println("ID: " + book.getIdBook() + " | Título: " + book.getTitle() 
+                System.out.println("ID: " + book.getIdBook() + " | Titulo: " + book.getTitle() 
                         + " | Precio: $" + book.getPrice() + " | Stock: " + book.getStock());
             }
         }
@@ -207,16 +207,12 @@ public class View {
 
         Customer customer = askCustomer(customers);
 
-        // 2. Método de Pago
         String paymentMethodName = askPaymentMethodName();
 
-        // 3. Crear Venta temporal
         Sale sale = Operations.createSale(customer, askSaleType());
 
-        // 4. Agregar Productos a la Venta
         addProductsToSale(sale, books, journals);
 
-        // 5. Procesar Pago
         processPayment(sale, paymentMethodName, sales);
     }
 
@@ -227,7 +223,7 @@ public class View {
     }
 
     private static String askPaymentMethodName() {
-        System.out.print("Ingrese el Método de Pago (Efectivo/Tarjeta/Transferencia): ");        
+        System.out.print("Ingrese el Metodo de Pago (Efectivo/Tarjeta/Transferencia): ");        
         return input.nextLine();
     }
     
@@ -246,7 +242,7 @@ public class View {
         while (again.equalsIgnoreCase("s")) {
             System.out.println("\n1. Libro");
             System.out.println("2. Revista");
-            System.out.print("Opción: ");
+            System.out.print("Opcion: ");
             int optionProduct = Integer.parseInt(input.nextLine());
 
             if (optionProduct == 1) {
@@ -257,7 +253,7 @@ public class View {
                 System.out.println("Opcion no valida.");
             }
 
-            System.out.print("¿Desea agregar otro producto a esta venta? (s/n): ");
+            System.out.print("Desea agregar otro producto a esta venta? (s/n): ");
             again = input.nextLine();
         }
     }
@@ -278,7 +274,7 @@ public class View {
                     + " | Stock: " + book.getStock()
             );
         }
-        System.out.print("Número del libro: ");
+        System.out.print("Numero del libro: ");
         int pos = Integer.parseInt(input.nextLine());
 
         if (pos >= 0 && pos < inventory.size()) {
@@ -287,12 +283,12 @@ public class View {
             int qty = Integer.parseInt(input.nextLine());
 
             if (Operations.addBookToSale(sale, selectedBook, qty)) {
-                System.out.println("¡Libro agregado a la venta!");
+                System.out.println("Libro agregado a la venta!");
             } else {
-                System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+                System.out.println("ERROR: Stock insuficiente o cantidad no valida.");
             }
         } else {
-            System.out.println("ERROR: Número de libro no válido.");
+            System.out.println("ERROR: Numero de libro no valido.");
         }
     }
 
@@ -312,7 +308,7 @@ public class View {
                     + " | Stock: " + journal.getStock()
             );
         }
-        System.out.print("Número de la revista: ");
+        System.out.print("Numero de la revista: ");
         int pos = Integer.parseInt(input.nextLine());
 
         if (pos >= 0 && pos < inventory.size()) {
@@ -321,12 +317,12 @@ public class View {
             int qty = Integer.parseInt(input.nextLine());
 
             if (Operations.addJournalToSale(sale, selectedJournal, qty)) {            
-                System.out.println("¡Revista agregada a la venta!");
+                System.out.println("Revista agregada a la venta!");
             } else {
-                System.out.println("ERROR: Stock insuficiente o cantidad no válida.");
+                System.out.println("ERROR: Stock insuficiente o cantidad no valida.");
             }
         } else {
-            System.out.println("ERROR: Número de revista no válido.");
+            System.out.println("ERROR: Numero de revista no valido.");
         }
     }
 
@@ -339,7 +335,7 @@ public class View {
         if (Operations.registerPayment(sale, paymentMethodName, amountPaid, sales)) {
             float cambio = amountPaid - totalSale;
             System.out.println("==========================================");
-            System.out.println("¡Venta procesada con éxito!");
+            System.out.println("Venta procesada con exito!");
             System.out.println("Cambio a entregar: $" + cambio);
             System.out.println(sale.generateSalesReport(LocalDate.now(), LocalDate.now()));
             try {
@@ -399,7 +395,7 @@ public class View {
             System.out.print("Ingrese el Nombre del Autor: ");
             authorName = input.nextLine();
             authorNames.add(authorName);
-            System.out.print("¿Desea agregar otro autor para este libro? (s/n): ");
+            System.out.print("Desea agregar otro autor para este libro? (s/n): ");
             option = input.nextLine();
         } while (option.equalsIgnoreCase("s"));
         System.out.print("Ingrese el Nombre de la Editorial: ");
@@ -416,7 +412,7 @@ public class View {
         eduLevel = input.nextLine();        
         Operations.addBook(inventory, title, authorNames, editorialName, price, stock, state, Genre, eduLevel);        
         System.out.println("========================================");
-        System.out.println("¡Libro agregado exitosamente al inventario!");
+        System.out.println("Libro agregado exitosamente al inventario!");
     }
 
     public static void addJournals(ArrayList<Journal> inventory) {
@@ -448,7 +444,7 @@ public class View {
 
         Operations.addJournal(inventory, name, editorialName, yearOfPublication, price, stock, state);        
         System.out.println("========================================");
-        System.out.println("¡Revista agregada exitosamente al inventario!");
+        System.out.println("Revista agregada exitosamente al inventario!");
     }
 
     public static void addPurchase(
@@ -475,7 +471,7 @@ public class View {
             } else {
                 addJournalToPurchase(purchase, journals);
             }
-            System.out.print("¿Desea agregar otro producto? (s/n): ");
+            System.out.print("Desea agregar otro producto? (s/n): ");
             again = input.nextLine();
         }
 
@@ -549,7 +545,7 @@ public class View {
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 for (Book b : results) {
-                    System.out.println("ID: " + b.getIdBook() + " | Título: " + b.getTitle() + " | Precio: $" + b.getPrice());
+                    System.out.println("ID: " + b.getIdBook() + " | Titulo: " + b.getTitle() + " | Precio: $" + b.getPrice());
                 }
             }
             case 2 -> {
@@ -559,7 +555,7 @@ public class View {
                 System.out.println("======================================");
                 System.out.println("Libros Encontrados: ");
                 for (Book b : results) {
-                    System.out.println("ID: " + b.getIdBook() + " | Título: " + b.getTitle() + " | Precio: $" + b.getPrice());
+                    System.out.println("ID: " + b.getIdBook() + " | Titulo: " + b.getTitle() + " | Precio: $" + b.getPrice());
                 }
             }
             default ->
@@ -613,7 +609,7 @@ public class View {
             ArrayList<Customer> customers) {
 
         if (customers.isEmpty()) {
-            System.out.println("No existen clientes registrados aún.");
+            System.out.println("No existen clientes registrados aun.");
             return;
         }
 
