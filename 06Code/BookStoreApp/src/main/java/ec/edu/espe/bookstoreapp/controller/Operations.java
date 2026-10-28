@@ -1,4 +1,4 @@
-package ec.edu.espe.controller;
+package ec.edu.espe.bookstoreapp.controller;
 
 import ec.edu.espe.bookstoreapp.exception.InvalidValueException;
 import ec.edu.espe.bookstoreapp.exception.EmptyInventoryException;
