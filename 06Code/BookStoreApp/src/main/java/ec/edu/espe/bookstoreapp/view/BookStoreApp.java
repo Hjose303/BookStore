@@ -30,7 +30,7 @@ public class BookStoreApp {
             View.showMenu();            
             
             try {
-                opc = Integer.parseInt(input.nextLine());
+                opc = View.askMenuOption();
                 View.showChoseOption(opc, inventoryBook, inventoryJournal, purchases, customers, sales);
             } catch (NumberFormatException e) {
                 while (controller) {                    
