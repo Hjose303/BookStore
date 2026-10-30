@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
 
 public class Operations {
 
-    // ==========================================
-    // MÉTODOS DE VALIDACIÓN REQUERIDOS POR VIEW
-    // ==========================================
     public static void requireInRange(int value, int min, int max, String fieldName) throws InvalidValueException {
         if (value < min || value > max) {
             throw new InvalidValueException("El campo " + fieldName + " debe estar entre " + min + " y " + max + ".");
@@ -51,9 +48,6 @@ public class Operations {
         }
     }
 
-    // ==========================================
-    // BÚSQUEDAS
-    // ==========================================
     public static ArrayList<Book> searchBookByTitle(
             String titleQuery, ArrayList<Book> allBooks) {
 
@@ -101,9 +95,6 @@ public class Operations {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    // ==========================================
-    // AGREGAR PRODUCTOS
-    // ==========================================
     public static void addBook(
             ArrayList<Book> inventory,
             String title,
@@ -199,10 +190,7 @@ public class Operations {
         Editorial editorial = new Editorial(editorialName);
         inventory.add(new Journal(name, editorial, yearOfPublication, price, initialStock, state));
     }
-    
-    // ==========================================
-    // CLIENTES Y VENTAS
-    // ==========================================
+
     public static Customer findOrCreateCustomer(String customerName, ArrayList<Customer> customers) {
         Customer customer = null;
 
@@ -392,9 +380,6 @@ public class Operations {
         return totalSales;
     }
 
-    // ==========================================
-    // COMPRAS A PROVEEDORES
-    // ==========================================
     public static Purchase createPurchase(String supplierName) {
         if (supplierName == null || supplierName.isBlank()) {
             supplierName = "Proveedor no identificado";

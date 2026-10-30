@@ -17,7 +17,7 @@
       "nameEditorial": "NAN"
     },
     "price": 10.0,
-    "stock": 5,
+    "stock": 4,
     "state": "Usado",
     "literaryGenre": {
       "idLiteraryGenre": 0,
@@ -29,7 +29,7 @@
     }
   },
   {
-    "idBook": 0,
+    "idBook": 1,
     "title": "Geometria Analitica",
     "authors": [
       {
@@ -42,7 +42,7 @@
       "nameEditorial": "Schaum"
     },
     "price": 15.0,
-    "stock": 9,
+    "stock": 8,
     "state": "Usado",
     "literaryGenre": {
       "idLiteraryGenre": 0,
@@ -51,6 +51,81 @@
     "educationalLevel": {
       "idLevel": 0,
       "nameEducationalLevel": "Colegial"
+    }
+  },
+  {
+    "idBook": 0,
+    "title": "Ecuaciones Diferenciales",
+    "authors": [
+      {
+        "idAuthor": 0,
+        "name": "Joe Fred Garcia Arcos"
+      }
+    ],
+    "editorial": {
+      "idEditorial": 0,
+      "nameEditorial": "NAN"
+    },
+    "price": 20.0,
+    "stock": 0,
+    "state": "Usado",
+    "literaryGenre": {
+      "idLiteraryGenre": 0,
+      "LiteraryGenre": "Matematicas"
+    },
+    "educationalLevel": {
+      "idLevel": 0,
+      "nameEducationalLevel": "Universitario"
+    }
+  },
+  {
+    "idBook": 0,
+    "title": "Don Quijote",
+    "authors": [
+      {
+        "idAuthor": 0,
+        "name": "Miguel de Servantes"
+      }
+    ],
+    "editorial": {
+      "idEditorial": 0,
+      "nameEditorial": "NAN"
+    },
+    "price": 20.0,
+    "stock": 3,
+    "state": "Nuevo",
+    "literaryGenre": {
+      "idLiteraryGenre": 0,
+      "LiteraryGenre": "Aventura "
+    },
+    "educationalLevel": {
+      "idLevel": 0,
+      "nameEducationalLevel": "Colegial"
+    }
+  },
+  {
+    "idBook": 1,
+    "title": "Vistazo",
+    "authors": [
+      {
+        "idAuthor": 1,
+        "name": "NAN"
+      }
+    ],
+    "editorial": {
+      "idEditorial": 1,
+      "nameEditorial": "Vistazo"
+    },
+    "price": 1.0,
+    "stock": 60,
+    "state": "Usado",
+    "literaryGenre": {
+      "idLiteraryGenre": 1,
+      "LiteraryGenre": "nan"
+    },
+    "educationalLevel": {
+      "idLevel": 1,
+      "nameEducationalLevel": "NAN"
     }
   }
 ]

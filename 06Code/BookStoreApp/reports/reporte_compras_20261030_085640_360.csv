@@ -1,0 +1,11 @@
+﻿sep=;
+REPORTE HISTORICO DE COMPRAS - ADQUISICIONES
+
+Tipo de Producto;Codigo;Producto;Cantidad;Precio de Compra;Subtotal;Proveedor;Fecha Compra
+"Libro";"0";"Calculo Vectorial";3;10.00;30.00;"Jhon";"2026-10-30"
+"Libro";"0";"Don Quijote";3;2.00;6.00;"Raul";"2026-10-30"
+"Libro";"0";"Calculo Vectorial";5;10.00;50.00;"Editorial Don Bosco";"2026-10-30"
+"Revista";"0";"Vanidades";10;5.00;50.00;"Editorial Don Bosco";"2026-10-30"
+"Libro";"1";"Geometria Analitica";5;15.00;75.00;"Editorial Don Bosco";"2026-10-30"
+
+TOTAL DE LAS COMPRAS;;;;;211.00;;

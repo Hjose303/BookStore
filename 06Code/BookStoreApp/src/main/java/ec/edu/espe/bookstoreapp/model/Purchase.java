@@ -24,6 +24,15 @@ public class Purchase {
         this.details = new ArrayList<>();
         this.totalPurchase = 0;
     }
+    
+    public float computeTotal() {
+        float total = 0;
+        for (PurchaseDetail detail : details) {
+            total += detail.computeSubtotal();
+        }
+        return total;
+    }
+
 
     public void addDetailPurchase(PurchaseDetail detail) {
         if (detail != null
@@ -61,6 +70,16 @@ public class Purchase {
         }
         return total;
     }
+    
+    public String generatePurchaseReport(LocalDate startDate, LocalDate endDate) {
+        StringBuilder report = new StringBuilder();
+        report.append("--- REPORTE DE COMPRA ID: ").append(idPurchase).append(" ---\n");
+        report.append("Fecha: ").append(date).append("\n");
+        report.append("Proveedor: ").append(supplier != null ? supplier.getNameSupplier() : "Desconocido").append("\n");
+        report.append("Total de la Adquisición: $").append(computeTotal()).append("\n");
+        return report.toString();
+    }
+
 
     @Override
     public String toString() {

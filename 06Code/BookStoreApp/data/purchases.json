@@ -1,1 +1,221 @@
-[]
+[
+  {
+    "idPurchase": 0,
+    "date": "2026-10-30",
+    "totalPurchase": 30.0,
+    "supplier": {
+      "idSupplier": 0,
+      "nameSupplier": "Jhon"
+    },
+    "details": [
+      {
+        "idPurchaseDetail": 0,
+        "stockPurchase": 3,
+        "purchasePrice": 10.0,
+        "book": {
+          "idBook": 0,
+          "title": "Calculo Vectorial",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Jerrorld E. Marsen"
+            },
+            {
+              "idAuthor": 1,
+              "name": "Anthony J. Tromba"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 10.0,
+          "stock": 5,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Universitario"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "idPurchase": 0,
+    "date": "2026-10-30",
+    "totalPurchase": 6.0,
+    "supplier": {
+      "idSupplier": 0,
+      "nameSupplier": "Raul"
+    },
+    "details": [
+      {
+        "idPurchaseDetail": 0,
+        "stockPurchase": 3,
+        "purchasePrice": 2.0,
+        "book": {
+          "idBook": 0,
+          "title": "Don Quijote",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Miguel de Servantes"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 20.0,
+          "stock": 3,
+          "state": "Nuevo",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Aventura "
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Colegial"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "idPurchase": 0,
+    "date": "2026-10-30",
+    "totalPurchase": 175.0,
+    "supplier": {
+      "idSupplier": 0,
+      "nameSupplier": "Editorial Don Bosco"
+    },
+    "details": [
+      {
+        "idPurchaseDetail": 0,
+        "stockPurchase": 5,
+        "purchasePrice": 10.0,
+        "book": {
+          "idBook": 0,
+          "title": "Calculo Vectorial",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Jerrorld E. Marsen"
+            },
+            {
+              "idAuthor": 1,
+              "name": "Anthony J. Tromba"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 10.0,
+          "stock": 4,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Universitario"
+          }
+        }
+      },
+      {
+        "idPurchaseDetail": 1,
+        "stockPurchase": 10,
+        "purchasePrice": 5.0,
+        "journal": {
+          "idJournal": 0,
+          "nameJournal": "Vanidades",
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "Vanidades"
+          },
+          "yearOfPublication": "2000-01-01",
+          "price": 10.0,
+          "stock": 45,
+          "state": "Usadas"
+        }
+      },
+      {
+        "idPurchaseDetail": 2,
+        "stockPurchase": 5,
+        "purchasePrice": 15.0,
+        "book": {
+          "idBook": 1,
+          "title": "Geometria Analitica",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Joseph H. Kindle"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "Schaum"
+          },
+          "price": 15.0,
+          "stock": 8,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Colegial"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "idPurchase": 0,
+    "date": "2026-10-30",
+    "totalPurchase": 100.0,
+    "supplier": {
+      "idSupplier": 0,
+      "nameSupplier": "Juan Lino"
+    },
+    "details": [
+      {
+        "idPurchaseDetail": 0,
+        "stockPurchase": 10,
+        "purchasePrice": 10.0,
+        "book": {
+          "idBook": 0,
+          "title": "Don Quijote",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Miguel de Servantes"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 20.0,
+          "stock": 3,
+          "state": "Nuevo",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Aventura "
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Colegial"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+﻿sep=;
+LIBRERIA OLIVO CULTURAL
+Numero de venta;0
+Fecha;2026-10-30
+Cliente;"Final"
+Tipo de venta;"Factura"
+Metodo de pago;"Efectivo"
+
+Tipo de producto;Codigo;Producto;Cantidad;Precio unitario;Subtotal
+"Libro";"0";"Ecuaciones Diferenciales";1;20.00;20.00
+"Revista";"0";"Vanidades";10;10.00;100.00
+
+TOTAL DE LA VENTA;;;;;120.00
+Monto recibido;120.00
+Cambio;0.00

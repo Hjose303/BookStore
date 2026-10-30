@@ -365,5 +365,205 @@
         "quantityProduct": 2
       }
     ]
+  },
+  {
+    "idSale": 0,
+    "date": "2026-10-30",
+    "customer": {
+      "idCustomer": 0,
+      "name": "Final",
+      "visitHistory": [
+        "2026-10-28",
+        "2026-10-28",
+        "2026-10-30"
+      ]
+    },
+    "typeSale": "Factura",
+    "payment": {
+      "idPayment": 0,
+      "amountPayment": 120.0,
+      "paymentMethod": {
+        "idCurrent": 1,
+        "idPaymentMethod": 0,
+        "namePaymentMethod": "Efectivo"
+      }
+    },
+    "details": [
+      {
+        "idDetail": 0,
+        "book": {
+          "idBook": 0,
+          "title": "Ecuaciones Diferenciales",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Joe Fred Garcia Arcos"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 20.0,
+          "stock": 1,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Universitario"
+          }
+        },
+        "quantityProduct": 1
+      },
+      {
+        "idDetail": 1,
+        "journal": {
+          "idJournal": 0,
+          "nameJournal": "Vanidades",
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "Vanidades"
+          },
+          "yearOfPublication": "2000-01-01",
+          "price": 10.0,
+          "stock": 50,
+          "state": "Usadas"
+        },
+        "quantityProduct": 10
+      }
+    ]
+  },
+  {
+    "idSale": 0,
+    "date": "2026-10-30",
+    "customer": {
+      "idCustomer": 0,
+      "name": "Jose",
+      "visitHistory": [
+        "2026-10-30"
+      ]
+    },
+    "typeSale": "Factura",
+    "payment": {
+      "idPayment": 0,
+      "amountPayment": 100.0,
+      "paymentMethod": {
+        "idCurrent": 1,
+        "idPaymentMethod": 0,
+        "namePaymentMethod": "Efectivo"
+      }
+    },
+    "details": [
+      {
+        "idDetail": 0,
+        "journal": {
+          "idJournal": 0,
+          "nameJournal": "Vanidades",
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "Vanidades"
+          },
+          "yearOfPublication": "2000-01-01",
+          "price": 10.0,
+          "stock": 45,
+          "state": "Usadas"
+        },
+        "quantityProduct": 5
+      },
+      {
+        "idDetail": 1,
+        "book": {
+          "idBook": 1,
+          "title": "Geometria Analitica",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Joseph H. Kindle"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "Schaum"
+          },
+          "price": 15.0,
+          "stock": 8,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Colegial"
+          }
+        },
+        "quantityProduct": 1
+      },
+      {
+        "idDetail": 2,
+        "book": {
+          "idBook": 0,
+          "title": "Calculo Vectorial",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Jerrorld E. Marsen"
+            },
+            {
+              "idAuthor": 1,
+              "name": "Anthony J. Tromba"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 10.0,
+          "stock": 4,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Universitario"
+          }
+        },
+        "quantityProduct": 1
+      },
+      {
+        "idDetail": 3,
+        "book": {
+          "idBook": 0,
+          "title": "Ecuaciones Diferenciales",
+          "authors": [
+            {
+              "idAuthor": 0,
+              "name": "Joe Fred Garcia Arcos"
+            }
+          ],
+          "editorial": {
+            "idEditorial": 0,
+            "nameEditorial": "NAN"
+          },
+          "price": 20.0,
+          "stock": 0,
+          "state": "Usado",
+          "literaryGenre": {
+            "idLiteraryGenre": 0,
+            "LiteraryGenre": "Matematicas"
+          },
+          "educationalLevel": {
+            "idLevel": 0,
+            "nameEducationalLevel": "Universitario"
+          }
+        },
+        "quantityProduct": 1
+      }
+    ]
   }
 ]

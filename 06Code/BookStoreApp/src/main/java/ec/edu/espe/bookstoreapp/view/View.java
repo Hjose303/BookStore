@@ -10,6 +10,7 @@ import ec.edu.espe.bookstoreapp.model.Purchase;
 import ec.edu.espe.bookstoreapp.model.Sale;
 import ec.edu.espe.bookstoreapp.model.JsonPersistence;
 import ec.edu.espe.bookstoreapp.model.InvoiceCsvPersistence;
+import ec.edu.espe.bookstoreapp.model.PurchaseCsvPersistence;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -34,7 +35,8 @@ public class View {
             6. Buscar revistas
             7. Estado economico
             8. Frecuencia de clientes
-            9. Salir
+            9. Reporte de compras
+            0. Salir
             =====================================================
             """);
     }
@@ -146,6 +148,15 @@ public class View {
             case 8 ->
                 checkClientFrequency(customers);
             case 9 -> {
+                try {
+                    // Asegúrate de pasar tu lista real de compras en lugar de 'purchases' si tiene otro nombre
+                    PurchaseCsvPersistence.generatePurchaseReport(purchases); 
+                    System.out.println("Reporte CSV generado con exito");
+                } catch (IOException e) {
+                    System.out.println("Error al generar el CSV: " + e.getMessage());
+                }
+            }
+            case 0 -> {
                 saveInventory(books, journals, purchases, customers, sales);
                 System.out.println("Datos guardados. Hasta pronto.");
                 System.exit(0);

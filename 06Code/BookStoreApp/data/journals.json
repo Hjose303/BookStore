@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "idJournal": 0,
+    "nameJournal": "Vanidades",
+    "editorial": {
+      "idEditorial": 0,
+      "nameEditorial": "Vanidades"
+    },
+    "yearOfPublication": "2000-01-01",
+    "price": 10.0,
+    "stock": 45,
+    "state": "Usadas"
+  }
+]
